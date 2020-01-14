@@ -12,3 +12,4 @@ key.jks
 /app/release
 /mvvmhabit/bintray.gradle
 *.jks
+bintrayUpload.gradle
