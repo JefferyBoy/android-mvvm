@@ -1,8 +1,7 @@
 package xyz.mxlei.app.data.source.local;
 
 import xyz.mxlei.app.data.source.LocalDataSource;
-
-import xyz.mxlei.app.utils.SPUtils;
+import xyz.mxlei.mvvmx.utils.SPUtils;
 
 /**
  * 本地数据源，可配合Room框架使用

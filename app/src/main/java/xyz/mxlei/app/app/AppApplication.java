@@ -7,7 +7,7 @@ import com.squareup.leakcanary.LeakCanary;
 
 import xyz.mxlei.mvvmx.base.BaseApplication;
 import xyz.mxlei.mvvmx.crash.CaocConfig;
-import xyz.mxlei.app.utils.KLog;
+import xyz.mxlei.mvvmx.utils.KLog;
 
 /**
  * Created by goldze on 2017/7/16.
