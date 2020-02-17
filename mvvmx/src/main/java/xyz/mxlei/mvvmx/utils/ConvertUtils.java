@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import xyz.mxlei.mvvmx.utils.constant.MemoryConstants;
 import xyz.mxlei.mvvmx.utils.constant.TimeConstants;
 
+
 /**
  * Created by goldze on 2017/5/14.
  * 转换相关工具类
@@ -30,7 +31,7 @@ public final class ConvertUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
-    private static final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    private static final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     /**
      * byteArr转hexString

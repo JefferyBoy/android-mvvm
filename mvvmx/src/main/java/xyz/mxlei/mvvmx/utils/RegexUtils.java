@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import xyz.mxlei.mvvmx.utils.constant.RegexConstants;
 
-
 /**
  * Created by goldze on 2017/6/19.
  * 正则相关工具类

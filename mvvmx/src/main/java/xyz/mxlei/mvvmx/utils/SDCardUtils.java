@@ -9,6 +9,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+
 /**
  * Created by goldze on 2017/5/14.
  * SD卡相关工具类
@@ -110,13 +111,13 @@ public final class SDCardUtils {
 
     public static class SDCardInfo {
         boolean isExist;
-        long    totalBlocks;
-        long    freeBlocks;
-        long    availableBlocks;
-        long    blockByteSize;
-        long    totalBytes;
-        long    freeBytes;
-        long    availableBytes;
+        long totalBlocks;
+        long freeBlocks;
+        long availableBlocks;
+        long blockByteSize;
+        long totalBytes;
+        long freeBytes;
+        long availableBytes;
 
         @Override
         public String toString() {
@@ -130,4 +131,24 @@ public final class SDCardUtils {
                     "\navailableBytes=" + availableBytes;
         }
     }
+
+    /**
+     * 删除文件及包含文件
+     */
+    public static void deleteFile(String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                File[] files = file.listFiles();
+                if(files != null){
+                    for (File f : files) {
+                        deleteFile(f.getPath());
+                    }
+                }
+            } else {
+                file.delete();
+            }
+        }
+    }
+
 }

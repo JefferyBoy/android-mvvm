@@ -35,7 +35,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import xyz.mxlei.mvvmx.R;
 
-public final class DefaultErrorActivity extends AppCompatActivity {
+public class DefaultErrorActivity extends AppCompatActivity {
 
     @SuppressLint("PrivateResource")
     @Override

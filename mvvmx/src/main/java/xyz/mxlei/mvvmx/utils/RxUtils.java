@@ -2,10 +2,11 @@ package xyz.mxlei.mvvmx.utils;
 
 import android.content.Context;
 
+import androidx.fragment.app.Fragment;
+
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 
-import androidx.fragment.app.Fragment;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;

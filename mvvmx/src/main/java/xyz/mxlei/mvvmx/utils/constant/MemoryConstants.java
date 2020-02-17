@@ -1,9 +1,10 @@
 package xyz.mxlei.mvvmx.utils.constant;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
 import androidx.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Created by goldze on 2017/5/14.

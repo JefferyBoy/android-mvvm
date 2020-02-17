@@ -3,6 +3,8 @@ package xyz.mxlei.mvvmx.base;
 import android.app.Application;
 import android.os.Bundle;
 
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.LifecycleProvider;
 
 import java.lang.ref.WeakReference;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
@@ -18,6 +21,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import xyz.mxlei.mvvmx.bus.event.SingleLiveEvent;
+import xyz.mxlei.mvvmx.utils.RxUtils;
 
 /**
  * Created by goldze on 2017/6/15.
@@ -61,6 +65,13 @@ public class BaseViewModel<M extends BaseModel> extends AndroidViewModel impleme
     }
 
     public UIChangeLiveData getUC() {
+        if (uc == null) {
+            uc = new UIChangeLiveData();
+        }
+        return uc;
+    }
+
+    public UIChangeLiveData getUc() {
         if (uc == null) {
             uc = new UIChangeLiveData();
         }
@@ -125,6 +136,32 @@ public class BaseViewModel<M extends BaseModel> extends AndroidViewModel impleme
             params.put(ParameterField.BUNDLE, bundle);
         }
         uc.startContainerActivityEvent.postValue(params);
+    }
+
+    public void startActivityForResult(Class<?> clz, int request_code) {
+        startActivityForResult(clz, request_code, null);
+    }
+
+    public void startActivityForResult(Class<?> clz, int request_code, Bundle bundle) {
+        Map<String, Object> params = new HashMap<>();
+        params.put(ParameterField.CLASS, clz);
+        if (bundle != null) {
+            params.put(ParameterField.BUNDLE, bundle);
+        }
+        params.put(ParameterField.REQUEST_CODE, request_code);
+        uc.startActivityForResultEvent.postValue(params);
+    }
+
+    /**
+     * 动态申请权限
+     */
+    public void requestPermission(FragmentActivity activity, io.reactivex.Observer<Permission> observer, String... permissions) {
+        if (permissions.length > 0) {
+            RxPermissions rxPermissions = new RxPermissions(activity);
+            rxPermissions.requestEach(permissions)
+                    .compose(RxUtils.schedulersTransformer())
+                    .subscribe(observer);
+        }
     }
 
     /**
@@ -199,6 +236,7 @@ public class BaseViewModel<M extends BaseModel> extends AndroidViewModel impleme
         private SingleLiveEvent<Void> dismissDialogEvent;
         private SingleLiveEvent<Map<String, Object>> startActivityEvent;
         private SingleLiveEvent<Map<String, Object>> startContainerActivityEvent;
+        private SingleLiveEvent<Map<String, Object>> startActivityForResultEvent;
         private SingleLiveEvent<Void> finishEvent;
         private SingleLiveEvent<Void> onBackPressedEvent;
 
@@ -216,6 +254,10 @@ public class BaseViewModel<M extends BaseModel> extends AndroidViewModel impleme
 
         public SingleLiveEvent<Map<String, Object>> getStartContainerActivityEvent() {
             return startContainerActivityEvent = createLiveData(startContainerActivityEvent);
+        }
+
+        public SingleLiveEvent<Map<String, Object>> getstartActivityForResultEvent() {
+            return startActivityForResultEvent = createLiveData(startActivityForResultEvent);
         }
 
         public SingleLiveEvent<Void> getFinishEvent() {
@@ -243,5 +285,6 @@ public class BaseViewModel<M extends BaseModel> extends AndroidViewModel impleme
         public static String CLASS = "CLASS";
         public static String CANONICAL_NAME = "CANONICAL_NAME";
         public static String BUNDLE = "BUNDLE";
+        public static String REQUEST_CODE = "REQUEST_CODE";
     }
 }

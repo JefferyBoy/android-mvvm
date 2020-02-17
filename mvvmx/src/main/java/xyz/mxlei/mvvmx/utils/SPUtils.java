@@ -3,12 +3,12 @@ package xyz.mxlei.mvvmx.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import androidx.annotation.NonNull;
 
 /**
  * Created by goldze on 2017/5/14.
@@ -56,6 +56,15 @@ public final class SPUtils {
      */
     public void put(@NonNull final String key, @NonNull final String value) {
         sp.edit().putString(key, value).apply();
+    }
+    /**
+     * SP中写入String
+     *
+     * @param key 键
+     * @param value 值
+     */
+    public void putRealTime(@NonNull final String key, @NonNull final String value) {
+        sp.edit().putString(key, value).commit();
     }
 
     /**
@@ -267,6 +276,10 @@ public final class SPUtils {
      */
     public void clear() {
         sp.edit().clear().apply();
+    }
+
+    public void clearRealTime() {
+        sp.edit().clear().commit();
     }
 
     private static boolean isSpace(final String s) {

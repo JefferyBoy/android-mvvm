@@ -122,6 +122,18 @@ public class AppManager {
     }
 
     /**
+     * 结束所有Activity，排除本身
+     * */
+    public void finishAllActivityIgnoreMe(Activity activity){
+        for (int i = 0, size = activityStack.size(); i < size; i++) {
+            Activity activity1 = activityStack.get(i);
+            if (activity1 != null && activity1 != activity) {
+                finishActivity(activityStack.get(i));
+            }
+        }
+    }
+
+    /**
      * 获取指定的Activity
      *
      * @author kymjs

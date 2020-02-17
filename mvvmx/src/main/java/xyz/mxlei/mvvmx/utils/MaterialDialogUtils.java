@@ -5,8 +5,13 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -14,8 +19,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 
 import java.util.List;
-
-import androidx.annotation.NonNull;
 
 import xyz.mxlei.mvvmx.R;
 
@@ -82,10 +85,11 @@ public class MaterialDialogUtils {
      * @return MaterialDialog.Builder
      */
     public static MaterialDialog.Builder showIndeterminateProgressDialog(Context context, String content, boolean horizontal) {
+
         MaterialDialog.Builder builder = new MaterialDialog.Builder(context)
                 .title(content)
-                .progress(true, 0)
-                .progressIndeterminateStyle(horizontal)
+                .titleGravity(GravityEnum.CENTER)
+                .customView(R.layout.dialog_loading,false)
                 .canceledOnTouchOutside(false)
                 .backgroundColorRes(R.color.white)
                 .keyListener(new DialogInterface.OnKeyListener() {
@@ -316,7 +320,7 @@ public class MaterialDialogUtils {
         MaterialDialog dialog = new MaterialDialog.Builder(context)
                 .title(title)
                 .customView(content, true)
-                .positiveText("确定")
+                .positiveText(android.R.string.ok)
                 .negativeText(android.R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -372,18 +376,16 @@ public class MaterialDialogUtils {
      * @param
      * @return MaterialDialog.Builder
      */
-    public static MaterialDialog.Builder showInputDialog(final Context context, String title, String
-            content) {
+    public static MaterialDialog.Builder showInputDialog(final Context context, String title, String content) {
 
         MaterialDialog.Builder builder = new MaterialDialog.Builder(context)
                 .title(title)
-                .content(content)
                 .inputType(InputType.TYPE_CLASS_TEXT |
                         InputType.TYPE_TEXT_VARIATION_PERSON_NAME |
                         InputType.TYPE_TEXT_FLAG_CAP_WORDS)
-                .positiveText("确定")
-                .negativeText("取消")
-                .input("hint", "prefill", true, new MaterialDialog.InputCallback() {
+                .positiveText(android.R.string.ok)
+                .negativeText(android.R.string.cancel)
+                .input("", content, true, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 
@@ -391,6 +393,25 @@ public class MaterialDialogUtils {
                 });
 
         return builder;
+    }
+
+
+    /*底部弹出显示*/
+    public static void showOnBottom(MaterialDialog dialog, int backGroup) {
+        Window window = dialog.getWindow();
+        dialog.show();
+        if (window != null) {
+            window.setWindowAnimations(R.style.animation_bottom_in_out);
+            window.setBackgroundDrawableResource(backGroup);
+            WindowManager.LayoutParams wlp = window.getAttributes();
+            //获取屏幕宽
+            wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            //宽度按屏幕大小的百分比设置，这里我设置的是全屏显示
+            wlp.gravity = Gravity.BOTTOM;
+            //距离底部的距离是0
+            wlp.y = 0;
+            window.setAttributes(wlp);
+        }
     }
 
 }

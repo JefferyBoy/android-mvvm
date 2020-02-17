@@ -81,6 +81,8 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
         }
         //关联ViewModel
         binding.setVariable(viewModelId, viewModel);
+        //viewModel中的liveData自动关联布局文件，不用手动写liveData.observer代码
+        binding.setLifecycleOwner(this);
         //让ViewModel拥有View的生命周期感应
         getLifecycle().addObserver(viewModel);
         //注入RxLifecycle生命周期
