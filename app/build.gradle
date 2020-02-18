@@ -38,7 +38,7 @@ dependencies {
         exclude group: 'com.android.support'
     }
     //MVVMHabit
-    implementation project(':mvvmx')
+    implementation project(':library')
     //内存泄漏测试
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
