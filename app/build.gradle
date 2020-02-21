@@ -11,6 +11,7 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -31,6 +32,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     //support
     implementation rootProject.ext.support["design"]
+    implementation rootProject.ext.dependencies["multidex"]
+
     //下拉刷新,上拉加载
     implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
     //底部tabBar

@@ -1,5 +1,9 @@
 package xyz.mxlei.app.app;
 
+import android.content.Context;
+
+import androidx.multidex.MultiDex;
+
 import xyz.mxlei.app.BuildConfig;
 import xyz.mxlei.app.R;
 import xyz.mxlei.app.ui.MainActivity;
@@ -14,6 +18,13 @@ import xyz.mxlei.mvvmx.utils.KLog;
  */
 
 public class AppApplication extends BaseApplication {
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
