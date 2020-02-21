@@ -149,7 +149,7 @@ public class BaseViewModel<M extends BaseModel> extends AndroidViewModel impleme
             params.put(ParameterField.BUNDLE, bundle);
         }
         params.put(ParameterField.REQUEST_CODE, request_code);
-        uc.getstartActivityForResultEvent().postValue(params);
+        uc.startActivityForResultEvent.postValue(params);
     }
 
     /**

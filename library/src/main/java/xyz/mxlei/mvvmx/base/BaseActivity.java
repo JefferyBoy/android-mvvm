@@ -125,6 +125,20 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
                 startActivity(clz, bundle);
             }
         });
+        //跳入新页面
+        viewModel.getUc().getstartActivityForResultEvent().observe(this, new Observer<Map<String, Object>>() {
+            @Override
+            public void onChanged(@Nullable Map<String, Object> params) {
+                Class<?> clz = (Class<?>) params.get(BaseViewModel.ParameterField.CLASS);
+                Bundle bundle = (Bundle) params.get(BaseViewModel.ParameterField.BUNDLE);
+                int requestCode = (int) params.get(BaseViewModel.ParameterField.REQUEST_CODE);
+                Intent intent = new Intent(BaseActivity.this,clz);
+                if (bundle != null) {
+                    intent.putExtras(bundle);
+                }
+                startActivityForResult(intent,requestCode);
+            }
+        });
         //跳入ContainerActivity
         viewModel.getUC().getStartContainerActivityEvent().observe(this, new Observer<Map<String, Object>>() {
             @Override

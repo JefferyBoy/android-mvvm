@@ -67,7 +67,7 @@ ext {
             //multidex
             "multidex"                             : "androidx.multidex:multidex:2.0.1",
             //mvvmx
-            "mvvmx"                                : "xyz.mxlei:mvvmx:1.2.1",
+            "mvvmx"                                : "xyz.mxlei:mvvmx:1.2.2",
     ]
 }
 
