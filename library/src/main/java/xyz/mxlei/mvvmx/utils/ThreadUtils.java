@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 public class ThreadUtils {
     private static ExecutorService threadPool;
     private static Handler handler;
-    private static final int POOL_SIZE = 5;
+    private static final int POOL_SIZE = Integer.MAX_VALUE;
 
     public static boolean isUIThread(){
         return Thread.currentThread().getId() == Looper.getMainLooper().getThread().getId();

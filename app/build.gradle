@@ -1,7 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
@@ -30,21 +27,18 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    //support
-    implementation rootProject.ext.support["design"]
-    implementation rootProject.ext.dependencies["multidex"]
-
+    implementation rootProject.ext.support.design
+    implementation rootProject.ext.support.appcompat
+    implementation rootProject.ext.support.constraintlayout
+    implementation rootProject.ext.dependencies.multidex
+    debugImplementation rootProject.ext.dependencies.leakcanary
+    debugImplementation rootProject.ext.dependencies.leakcanaryFragment
     //下拉刷新,上拉加载
     implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
     //底部tabBar
     implementation('me.majiajie:pager-bottom-tab-strip:2.2.5') {
         exclude group: 'com.android.support'
     }
-    //MVVMHabit
     implementation project(':library')
-    //内存泄漏测试
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
+
 }

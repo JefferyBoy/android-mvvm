@@ -1,16 +1,14 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply from: '../bintrayUpload.gradle'
+apply from: '../nexus.gradle'
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    compileSdkVersion 28
     defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName '1.0'
     }
     dataBinding {
         enabled true
@@ -30,9 +28,8 @@ android {
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     //support
-    api rootProject.ext.support["support-v4"]
-    api rootProject.ext.support["appcompat-v7"]
-    api rootProject.ext.support["recyclerview-v7"]
+    api rootProject.ext.support["appcompat"]
+    api rootProject.ext.support["recyclerview"]
     //rxjava
     api rootProject.ext.dependencies.rxjava
     api rootProject.ext.dependencies.rxandroid
@@ -73,7 +70,4 @@ dependencies {
     //Google LiveData和ViewModel组件
     api rootProject.ext.dependencies["lifecycle-extensions"]
     annotationProcessor rootProject.ext.dependencies["lifecycle-compiler"]
-    //kotlin
-    api rootProject.ext.dependencies["kotlin"]
-    api rootProject.ext.dependencies["kotlin-android"]
 }
