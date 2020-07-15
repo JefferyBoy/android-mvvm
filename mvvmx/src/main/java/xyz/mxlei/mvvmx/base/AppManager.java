@@ -2,9 +2,9 @@ package xyz.mxlei.mvvmx.base;
 
 import android.app.Activity;
 
-import java.util.Stack;
-
 import androidx.fragment.app.Fragment;
+
+import java.util.Stack;
 
 /**
  * Created by goldze on 2017/6/15.
