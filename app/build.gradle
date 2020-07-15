@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    compileSdkVersion build_versions.compileSdkVersion
     defaultConfig {
-        applicationId rootProject.ext.android.applicationId
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
+        applicationId 'xyz.mxlei.mvvmx'
+        minSdkVersion build_versions.minSdkVersion
+        targetSdkVersion build_versions.targetSdkVersion
+        versionCode build_versions.versionCode
+        versionName build_versions.versionName
         multiDexEnabled true
     }
     buildTypes {
@@ -27,18 +27,18 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation rootProject.ext.support.design
-    implementation rootProject.ext.support.appcompat
-    implementation rootProject.ext.support.constraintlayout
-    implementation rootProject.ext.dependencies.multidex
-    debugImplementation rootProject.ext.dependencies.leakcanary
-    debugImplementation rootProject.ext.dependencies.leakcanaryFragment
+    implementation support.design
+    implementation support.appcompat
+    implementation support.constraintlayout
+    implementation depends.multidex
+    debugImplementation depends.leakcanary
+    debugImplementation depends.leakcanary_fragment
     //下拉刷新,上拉加载
     implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
     //底部tabBar
     implementation('me.majiajie:pager-bottom-tab-strip:2.2.5') {
         exclude group: 'com.android.support'
     }
-    implementation project(':library')
+    implementation project(':mvvmx')
 
 }

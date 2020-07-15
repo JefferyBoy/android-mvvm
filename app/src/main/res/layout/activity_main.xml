@@ -1,10 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="xyz.mxlei.app.ui.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</LinearLayout>
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="xyz.mxlei.app.ui.MainViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        tools:context="xyz.mxlei.app.ui.MainActivity">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:translationX="@{viewmodel.imageTranslateX}"
+            android:translationY="@{viewmodel.imageTranslateY}"
+            app:binding_onTouch="@{viewmodel.onImageTouch}"
+            app:binding_placeholderRes="@{@drawable/apple}"
+            app:binding_src='@{"https://gprinter.oss-cn-hangzhou.aliyuncs.com/code.jpg"}' />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="用户名"
+            android:minWidth="200dp"
+            android:text="@={viewmodel.user.name}" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="密码"
+            android:minWidth="200dp"
+            android:text="@={viewmodel.user.password}" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="登录"
+            app:binding_onClick="@{viewmodel.clickLogin}"
+            app:binding_isThrottleFirst="@{true}" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开关    "
+            app:binding_onCheckedChange="@{viewmodel.switchCheckedChange}" />
+    </LinearLayout>
+</layout>

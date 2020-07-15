@@ -4,18 +4,14 @@ import android.content.Context;
 
 import androidx.multidex.MultiDex;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import xyz.mxlei.app.BuildConfig;
 import xyz.mxlei.app.R;
 import xyz.mxlei.app.ui.MainActivity;
-import com.squareup.leakcanary.LeakCanary;
-
 import xyz.mxlei.mvvmx.base.BaseApplication;
 import xyz.mxlei.mvvmx.crash.CaocConfig;
 import xyz.mxlei.mvvmx.utils.KLog;
-
-/**
- * Created by goldze on 2017/7/16.
- */
 
 public class AppApplication extends BaseApplication {
 

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    使用Databinding的BindingAdapter的自定义属性
+-->
+<resources>
+    <attr name="binding_onCheckedChange" format="reference" />
+    <attr name="binding_onScrollChange" format="reference" />
+    <attr name="binding_onScrollStateChange" format="reference" />
+    <attr name="binding_items" format="reference" />
+    <attr name="binding_items_layout" format="integer" />
+    <attr name="binding_items_dropdownlayout" format="integer" />
+    <attr name="binding_items_onSelected" format="reference" />
+    <attr name="binding_items_selected_index" format="integer" />
+    <attr name="binding_onItemClick" format="reference" />
+    <attr name="binding_onItemLongClick" format="reference" />
+    <attr name="itemBinding" format="reference" />
+    <attr name="items" format="reference" />
+    <attr name="adapter" format="reference" />
+
+    <declare-styleable name="ImageView">
+        <attr name="binding_src" format="string" />
+        <attr name="binding_placeholderRes" format="reference|color" />
+    </declare-styleable>
+
+    <declare-styleable name="View">
+        <attr name="binding_onClick" format="reference" />
+        <attr name="binding_isThrottleFirst" format="boolean" />
+        <attr name="binding_onLongClick" format="reference" />
+        <attr name="binding_onFocusChanged" format="reference" />
+        <attr name="binding_onTouch" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="EditText">
+        <attr name="binding_beforeTextChanged" format="reference" />
+        <attr name="binding_onTextChanged" format="reference" />
+        <attr name="binding_afterTextChanged" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="CompoundButton">
+        <attr name="binding_onCheckedChange" />
+    </declare-styleable>
+
+    <declare-styleable name="RadioGroup">
+        <attr name="binding_onCheckedChange" />
+    </declare-styleable>
+
+    <declare-styleable name="ScrollView">
+        <attr name="binding_onScrollChange" />
+    </declare-styleable>
+    <declare-styleable name="NestedScrollView">
+        <attr name="binding_onScrollChange" />
+    </declare-styleable>
+
+    <declare-styleable name="Spinner">
+        <attr name="binding_items" />
+        <attr name="binding_items_selected_index" />
+        <attr name="binding_items_onSelected" />
+        <attr name="binding_items_layout" />
+        <attr name="binding_items_dropdownlayout" />
+    </declare-styleable>
+
+    <!--集合数据绑定，依赖bindingcollectionadapter库来实现-->
+    <declare-styleable name="AdapterView">
+        <!--ItemBinding-->
+        <attr name="itemBinding" />
+        <!--List-->
+        <attr name="items" />
+        <!--BindingListViewAdapter-->
+        <attr name="adapter" />
+        <!--item类型数量-->
+        <attr name="itemTypeCount" format="integer" />
+        <attr name="itemDropDownLayout" format="integer" />
+        <!--BindingListViewAdapter.ItemIds-->
+        <attr name="itemIds" format="reference" />
+        <!--BindingListViewAdapter.ItemIsEnabled-->
+        <attr name="itemIsEnabled" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="ListView" parent="AdapterView">
+        <attr name="binding_onItemClick" />
+        <attr name="binding_onItemLongClick" />
+        <!--BindingCommand<ListViewScrollDataWrapper> -->
+        <attr name="binding_onScrollChange" />
+        <attr name="binding_onScrollStateChange" />
+    </declare-styleable>
+
+    <!--RecyclerView数据绑定，依赖bindingcollectionadapter-recycleview库来实现-->
+    <declare-styleable name="RecyclerView" parent="AdapterView">
+        <attr name="layoutManager" format="reference" />
+        <!--BindingCommand<ListViewScrollDataWrapper> -->
+        <attr name="binding_onScrollChange" />
+        <attr name="binding_onScrollStateChange" />
+        <attr name="binding_lineManager" format="reference" />
+        <attr name="binding_itemAnimator" format="reference" />
+    </declare-styleable>
+
+    <!--ViewPager数据绑定，依赖bindingcollectionadapter库来实现-->
+    <declare-styleable name="ViewPager">
+        <!--ItemBinding-->
+        <attr name="itemBinding" />
+        <!--List-->
+        <attr name="items" />
+        <!--BindingViewPagerAdapter<T>-->
+        <attr name="adapter" />
+        <!--BindingViewPagerAdapter.PageTitles<T>-->
+        <attr name="pageTitles" format="reference" />
+        <!--BindingCommand<ViewPagerDataWrapper> -->
+        <attr name="binding_onPageScrolledd" format="reference" />
+        <!--BindingCommand<Integer> -->
+        <attr name="binding_onPageSelected" format="reference" />
+        <!--BindingCommand<Integer> -->
+        <attr name="binding_onPageScrollStateChanged" format="reference" />
+    </declare-styleable>
+
+</resources>
