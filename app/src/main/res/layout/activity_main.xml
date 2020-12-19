@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -15,6 +15,7 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical"
+        android:padding="16dp"
         tools:context="xyz.mxlei.app.ui.MainActivity">
 
         <ImageView
@@ -45,13 +46,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="登录"
-            app:binding_onClick="@{viewmodel.clickLogin}"
-            app:binding_isThrottleFirst="@{true}" />
+            app:binding_isThrottleFirst="@{true}"
+            app:binding_onClick="@{viewmodel.clickLogin}" />
 
         <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="开关    "
             app:binding_onCheckedChange="@{viewmodel.switchCheckedChange}" />
+
+        <Button
+            android:id="@+id/btn_lazy_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="懒加载Fragment" />
     </LinearLayout>
 </layout>

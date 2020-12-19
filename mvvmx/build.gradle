@@ -1,9 +1,9 @@
 apply plugin: 'com.android.library'
 
-version '1.2.5'
+version '1.2.7'
 group 'xyz.mxlei'
 
-apply from: '../bintrayUpload.gradle'
+apply from: '../bintray.gradle'
 apply from: '../nexus.gradle'
 
 

@@ -94,4 +94,11 @@ public class MainViewModel extends AndroidViewModel {
             KLog.d("clickImage");
         }
     });
+
+    public BindingCommand clickLazy = new BindingCommand(new BindingAction() {
+        @Override
+        public void call() {
+
+        }
+    });
 }

@@ -51,7 +51,7 @@ public class DefaultErrorActivity extends AppCompatActivity {
         }
         a.recycle();
 
-        setContentView(R.layout.customactivityoncrash_default_error_activity);
+        setContentView(R.layout.mvvmx_customactivityoncrash_default_error_activity);
 
         //Close/restart button logic:
         //If a class if set, use restart.

@@ -31,6 +31,7 @@ dependencies {
     implementation support.appcompat
     implementation support.constraintlayout
     implementation depends.multidex
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     debugImplementation depends.leakcanary
     debugImplementation depends.leakcanary_fragment
     //下拉刷新,上拉加载
@@ -39,6 +40,7 @@ dependencies {
     implementation('me.majiajie:pager-bottom-tab-strip:2.2.5') {
         exclude group: 'com.android.support'
     }
+//    implementation mxlei.mvvmx
     implementation project(':mvvmx')
 
 }

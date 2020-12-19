@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -21,17 +22,25 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
 
+import xyz.mxlei.mvvmx.R;
 import xyz.mxlei.mvvmx.base.BaseViewModel.ParameterField;
 import xyz.mxlei.mvvmx.utils.MaterialDialogUtils;
 
 /**
- * Created by goldze on 2017/6/15.
+ * @author mxlei
+ * @date 2020/12/16
  */
-public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseViewModel> extends RxFragment implements IBaseView {
+public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends BaseViewModel> extends RxFragment implements IBaseView {
     protected V binding;
     protected VM viewModel;
     private int viewModelId;
     private MaterialDialog dialog;
+    private boolean isLoaded = false;
+
+    private LayoutInflater mLayoutInflater;
+    private Bundle mSavedInstanceState;
+    private ViewGroup mViewGroup;
+    private FrameLayout mFragmentRoot;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,8 +56,13 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, initContentView(inflater, container, savedInstanceState), container, false);
-        return binding.getRoot();
+        this.mSavedInstanceState = savedInstanceState;
+        this.mLayoutInflater = inflater;
+        this.mViewGroup = container;
+
+        View view = inflater.inflate(R.layout.mvvmx_fragment_loading, container, false);
+        mFragmentRoot = view.findViewById(R.id.root_container);
+        return view;
     }
 
     @Override
@@ -60,11 +74,21 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
         if (binding != null) {
             binding.unbind();
         }
+        isLoaded = false;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        if (!isLoaded && !isHidden()) {
+            lazyInit(mSavedInstanceState);
+            isLoaded = true;
+            onLazyLoaded();
+        }
+    }
+
+    private void lazyInit(@Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(mLayoutInflater, initContentView(mLayoutInflater, mViewGroup, savedInstanceState), mViewGroup, false);
         //私有的初始化Databinding和ViewModel方法
         initViewDataBinding();
         //私有的ViewModel与View的契约事件回调逻辑
@@ -75,6 +99,11 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
         initViewObservable();
         //注册RxBus
         viewModel.registerRxBus();
+        mFragmentRoot.removeAllViews();
+        mFragmentRoot.addView(binding.getRoot());
+    }
+
+    protected void onLazyLoaded() {
     }
 
     /**

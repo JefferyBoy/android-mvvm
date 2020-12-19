@@ -112,7 +112,7 @@ public class BaseViewModel<M extends BaseModel> extends AndroidViewModel impleme
         if (bundle != null) {
             params.put(ParameterField.BUNDLE, bundle);
         }
-        uc.startActivityEvent.postValue(params);
+        uc.getStartActivityEvent().postValue(params);
     }
 
     /**
@@ -136,7 +136,7 @@ public class BaseViewModel<M extends BaseModel> extends AndroidViewModel impleme
         if (bundle != null) {
             params.put(ParameterField.BUNDLE, bundle);
         }
-        uc.startContainerActivityEvent.postValue(params);
+        uc.getStartContainerActivityEvent().postValue(params);
     }
 
     public void startActivityForResult(Class<?> clz, int request_code) {
@@ -150,7 +150,7 @@ public class BaseViewModel<M extends BaseModel> extends AndroidViewModel impleme
             params.put(ParameterField.BUNDLE, bundle);
         }
         params.put(ParameterField.REQUEST_CODE, request_code);
-        uc.startActivityForResultEvent.postValue(params);
+        uc.getstartActivityForResultEvent().postValue(params);
     }
 
     /**

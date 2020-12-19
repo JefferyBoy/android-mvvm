@@ -90,7 +90,7 @@ public class MaterialDialogUtils {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(context)
                 .title(content)
                 .titleGravity(GravityEnum.CENTER)
-                .customView(R.layout.dialog_loading,false)
+                .customView(R.layout.mvvmx_dialog_loading, false)
                 .canceledOnTouchOutside(false)
                 .backgroundColorRes(R.color.white)
                 .keyListener(new DialogInterface.OnKeyListener() {
