@@ -6,9 +6,6 @@ import android.view.View;
 
 import androidx.databinding.BindingAdapter;
 
-import xyz.mxlei.mvvmx.binding.command.BindingCommand;
-import xyz.mxlei.mvvmx.binding.command.ResponseCommand;
-
 /**
  * @author mxlei
  * @date 2020/7/12
@@ -20,7 +17,7 @@ public class BindingView {
      */
     private static abstract class ClickListener implements View.OnClickListener {
         //是否防重复点击
-        private boolean isThrottleFirst;
+        private final boolean isThrottleFirst;
         private long clickTime;
         //放重复点击间隔
         private static final int CLICK_INTERVAL = 1000;
@@ -50,38 +47,38 @@ public class BindingView {
     }
 
     @BindingAdapter(value = {"binding_onClick", "binding_isThrottleFirst"}, requireAll = false)
-    public static void setAdapter(View view, final BindingCommand command, final boolean isThrottleFirst) {
+    public static void setAdapter(final View view, final BindingCommand command, final boolean isThrottleFirst) {
         view.setOnClickListener(new ClickListener(isThrottleFirst) {
             @Override
             public void click(View v) {
-                command.execute();
+                command.call(view, null);
             }
         });
     }
 
     @BindingAdapter(value = {"binding_onLongClick"}, requireAll = false)
-    public static void setAdapter2(View view, final BindingCommand command) {
+    public static void setAdapter2(final View view, final BindingCommand command) {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                command.execute();
+                command.call(view, null);
                 return false;
             }
         });
     }
 
     @BindingAdapter(value = {"binding_onFocusChanged"}, requireAll = false)
-    public static void setAdapter3(View view, final BindingCommand<Boolean> command) {
+    public static void setAdapter3(final View view, final BindingCommand<Boolean> command) {
         view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                command.execute(hasFocus);
+                command.call(view, hasFocus);
             }
         });
     }
 
     @BindingAdapter(value = {"binding_onTouch"}, requireAll = false)
-    public static void setAdapter4(View view, final ResponseCommand<MotionEvent, Boolean> command) {
+    public static void setAdapter4(final View view, final BindingCommand<MotionEvent> command) {
         view.setClickable(true);
         view.setFocusable(true);
         view.setOnTouchListener(new View.OnTouchListener() {
@@ -89,7 +86,8 @@ public class BindingView {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 try {
-                    return command.execute(event);
+                    command.call(view, event);
+                    return true;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -12,11 +12,11 @@ import okio.Source;
 import xyz.mxlei.mvvmx.bus.RxBus;
 
 /**
- * Created by goldze on 2017/5/11.
+ * @author mxlei
  */
 
 public class ProgressResponseBody extends ResponseBody {
-    private ResponseBody responseBody;
+    private final ResponseBody responseBody;
 
     private BufferedSource bufferedSource;
     private String tag;

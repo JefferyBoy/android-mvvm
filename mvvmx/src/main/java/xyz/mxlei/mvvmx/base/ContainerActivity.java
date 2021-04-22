@@ -16,6 +16,7 @@ import xyz.mxlei.mvvmx.R;
 
 
 /**
+ * @author mxlei
  * 盛装Fragment的一个容器(代理)Activity
  * 普通界面只需要编写Fragment,使用此Activity盛装,这样就不需要每个界面都在AndroidManifest中注册一遍
  */

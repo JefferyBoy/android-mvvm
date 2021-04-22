@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
-version '1.2.7'
-group 'xyz.mxlei'
+version '1.2.10'
+group 'com.gainscha'
 
 apply from: '../bintray.gradle'
 apply from: '../nexus.gradle'

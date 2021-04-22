@@ -1,7 +1,7 @@
 package xyz.mxlei.mvvmx.utils;
 
 /**
- * Created by goldze on 2017/5/14.
+ * @author mxlei
  * 字符串相关工具类
  */
 public final class StringUtils {

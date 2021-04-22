@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
@@ -25,7 +26,7 @@ import xyz.mxlei.mvvmx.base.BaseViewModel.ParameterField;
 import xyz.mxlei.mvvmx.utils.MaterialDialogUtils;
 
 /**
- * Created by goldze on 2017/6/15.
+ * @author mxlei
  */
 public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseViewModel> extends RxFragment implements IBaseView {
     protected V binding;
@@ -46,7 +47,7 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, initContentView(inflater, container, savedInstanceState), container, false);
         return binding.getRoot();
     }

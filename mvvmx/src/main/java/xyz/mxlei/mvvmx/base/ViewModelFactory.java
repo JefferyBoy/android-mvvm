@@ -10,7 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created by goldze on 2018/9/30.
+ * @author mxlei
  */
 
 public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {

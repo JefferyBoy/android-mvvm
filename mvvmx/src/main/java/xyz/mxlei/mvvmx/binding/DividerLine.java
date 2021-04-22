@@ -10,7 +10,7 @@ import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Created by goldze on 2017/6/16.
+ * @author mxlei
  */
 public class DividerLine extends RecyclerView.ItemDecoration {
     private static final String TAG = DividerLine.class.getCanonicalName();
@@ -19,8 +19,8 @@ public class DividerLine extends RecyclerView.ItemDecoration {
     //控制分隔线的属性,值为一个drawable
     private static final int[] ATTRS = {android.R.attr.listDivider};
     //divider对应的drawable
-    private Drawable dividerDrawable;
-    private Context mContext;
+    private final Drawable dividerDrawable;
+    private final Context mContext;
     private int dividerSize;
     //默认为null
     private LineDrawMode mMode = null;

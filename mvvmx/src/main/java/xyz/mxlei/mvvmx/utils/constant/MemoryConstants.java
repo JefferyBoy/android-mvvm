@@ -7,7 +7,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Created by goldze on 2017/5/14.
+ * @author mxlei
  * 存储相关常量
  */
 public final class MemoryConstants {

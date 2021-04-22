@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 
 /**
- * Created by goldze on 2017/5/14.
+ * @author mxlei
  * SD卡相关工具类
  */
 public final class SDCardUtils {

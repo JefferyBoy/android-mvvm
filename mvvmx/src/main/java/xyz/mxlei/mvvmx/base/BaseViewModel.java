@@ -25,7 +25,7 @@ import xyz.mxlei.mvvmx.bus.event.SingleLiveEvent;
 import xyz.mxlei.mvvmx.utils.RxUtils;
 
 /**
- * Created by goldze on 2017/6/15.
+ * @author mxlei
  */
 public class BaseViewModel<M extends BaseModel> extends AndroidViewModel implements IBaseViewModel, Consumer<Disposable> {
     protected M model;

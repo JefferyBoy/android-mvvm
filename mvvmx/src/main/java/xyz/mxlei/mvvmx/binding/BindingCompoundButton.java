@@ -4,8 +4,6 @@ import android.widget.CompoundButton;
 
 import androidx.databinding.BindingAdapter;
 
-import xyz.mxlei.mvvmx.binding.command.BindingCommand;
-
 /**
  * @author mxlei
  * @date 2020/7/14
@@ -17,7 +15,7 @@ public class BindingCompoundButton {
         buttonView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                command.execute(isChecked);
+                command.call(buttonView, isChecked);
             }
         });
     }

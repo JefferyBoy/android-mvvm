@@ -11,13 +11,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by goldze on 2017/5/14.
+ * @author mxlei
  * SharedPreferences工具类
  */
 public final class SPUtils {
 
-    private static Map<String, SPUtils> sSPMap = new HashMap<>();
-    private SharedPreferences sp;
+    private static final Map<String, SPUtils> sSPMap = new HashMap<>();
+    private final SharedPreferences sp;
 
     /**
      * 获取SP实例

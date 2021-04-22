@@ -4,8 +4,7 @@ package xyz.mxlei.mvvmx.base;
 import androidx.annotation.NonNull;
 
 /**
- * Create Author：goldze
- * Create Date：2019/01/25
+ * @author mxlei
  * Description：RecycleView多布局ItemViewModel是封装
  */
 

@@ -19,7 +19,7 @@ import androidx.annotation.StringRes;
 import java.lang.ref.WeakReference;
 
 /**
- * Created by goldze on 2017/5/14.
+ * @author mxlei
  * 吐司工具类
  */
 public final class ToastUtils {
@@ -33,7 +33,7 @@ public final class ToastUtils {
     private static int bgResource      = -1;
     private static int messageColor    = DEFAULT_COLOR;
     private static WeakReference<View> sViewWeakReference;
-    private static Handler sHandler = new Handler(Looper.getMainLooper());
+    private static final Handler sHandler = new Handler(Looper.getMainLooper());
 
     private ToastUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");

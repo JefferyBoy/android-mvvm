@@ -3,7 +3,7 @@ package xyz.mxlei.mvvmx.binding;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Created by goldze on 2017/6/16.
+ * @author mxlei
  */
 public class LineManagers {
     protected LineManagers() {

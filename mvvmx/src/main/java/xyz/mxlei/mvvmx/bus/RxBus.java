@@ -11,6 +11,7 @@ import io.reactivex.subjects.Subject;
 
 
 /**
+ * @author mxlei
  * 只会把在订阅发生的时间点之后来自原始Observable的数据发射给观察者
  */
 public class RxBus {

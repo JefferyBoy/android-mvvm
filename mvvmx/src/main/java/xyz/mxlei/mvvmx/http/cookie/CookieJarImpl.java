@@ -9,11 +9,11 @@ import okhttp3.HttpUrl;
 import xyz.mxlei.mvvmx.http.cookie.store.CookieStore;
 
 /**
- * Created by goldze on 2017/5/13.
+ * @author mxlei
  */
 public class CookieJarImpl implements CookieJar {
 
-    private CookieStore cookieStore;
+    private final CookieStore cookieStore;
 
     public CookieJarImpl(CookieStore cookieStore) {
         if (cookieStore == null) {

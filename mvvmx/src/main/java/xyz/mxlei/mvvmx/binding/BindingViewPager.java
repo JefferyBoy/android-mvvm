@@ -3,8 +3,6 @@ package xyz.mxlei.mvvmx.binding;
 import androidx.databinding.BindingAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import xyz.mxlei.mvvmx.binding.command.BindingCommand;
-
 /**
  * @author mxlei
  * @date 2020/7/15
@@ -35,14 +33,14 @@ public class BindingViewPager {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 if (onPageScroll != null) {
-                    onPageScroll.execute(new ViewPagerDataWrapper(position, positionOffset, positionOffsetPixels, state));
+                    onPageScroll.call(viewPager, new ViewPagerDataWrapper(position, positionOffset, positionOffsetPixels, state));
                 }
             }
 
             @Override
             public void onPageSelected(int position) {
                 if (onPageSelected != null) {
-                    onPageSelected.execute(position);
+                    onPageSelected.call(viewPager, position);
                 }
             }
 
@@ -50,7 +48,7 @@ public class BindingViewPager {
             public void onPageScrollStateChanged(int state) {
                 this.state = state;
                 if (onPageScrollStateChange != null) {
-                    onPageScrollStateChange.execute(state);
+                    onPageScrollStateChange.call(viewPager, state);
                 }
             }
         });

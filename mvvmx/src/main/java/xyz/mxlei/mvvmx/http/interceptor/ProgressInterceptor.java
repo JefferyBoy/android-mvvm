@@ -7,7 +7,7 @@ import okhttp3.Response;
 import xyz.mxlei.mvvmx.http.download.ProgressResponseBody;
 
 /**
- * Created by goldze on 2017/5/10.
+ * @author mxlei
  */
 
 public class ProgressInterceptor implements Interceptor {

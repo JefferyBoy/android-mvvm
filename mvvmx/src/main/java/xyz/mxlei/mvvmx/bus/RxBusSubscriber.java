@@ -3,6 +3,7 @@ package xyz.mxlei.mvvmx.bus;
 import io.reactivex.observers.DisposableObserver;
 
 /**
+ * @author mxlei
  * 为RxBus使用的Subscriber, 主要提供next事件的try,catch
  */
 public abstract class RxBusSubscriber<T> extends DisposableObserver<T> {

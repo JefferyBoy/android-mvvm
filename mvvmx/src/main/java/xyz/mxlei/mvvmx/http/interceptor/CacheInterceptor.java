@@ -11,12 +11,12 @@ import okhttp3.Response;
 import xyz.mxlei.mvvmx.http.NetworkUtil;
 
 /**
- * Created by goldze on 2017/5/10.
+ * @author mxlei
  * 无网络状态下智能读取缓存的拦截器
  */
 public class CacheInterceptor implements Interceptor {
 
-    private Context context;
+    private final Context context;
 
     public CacheInterceptor(Context context) {
         this.context = context;

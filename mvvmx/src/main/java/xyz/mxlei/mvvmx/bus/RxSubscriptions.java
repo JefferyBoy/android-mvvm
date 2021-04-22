@@ -4,10 +4,11 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 /**
+ * @author mxlei
  * 管理 CompositeSubscription
  */
 public class RxSubscriptions {
-    private static CompositeDisposable mSubscriptions = new CompositeDisposable ();
+    private static final CompositeDisposable mSubscriptions = new CompositeDisposable();
 
     public static boolean isDisposed() {
         return mSubscriptions.isDisposed();

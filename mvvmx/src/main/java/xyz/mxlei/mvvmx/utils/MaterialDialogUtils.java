@@ -25,7 +25,7 @@ import xyz.mxlei.mvvmx.R;
 
 
 /**
- * Created by goldze on 2017/5/10.
+ * @author mxlei
  */
 
 public class MaterialDialogUtils {

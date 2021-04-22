@@ -9,7 +9,7 @@ import okhttp3.Cookie;
 import okhttp3.HttpUrl;
 
 /**
- * Created by goldze on 2017/5/13.
+ * @author mxlei
  */
 public class MemoryCookieStore implements CookieStore {
 

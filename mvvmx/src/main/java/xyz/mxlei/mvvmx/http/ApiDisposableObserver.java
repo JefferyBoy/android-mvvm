@@ -7,7 +7,7 @@ import xyz.mxlei.mvvmx.utils.ToastUtils;
 import xyz.mxlei.mvvmx.utils.Utils;
 
 /**
- * Created by goldze on 2017/5/10.
+ * @author mxlei
  * 统一的Code封装处理。该类仅供参考，实际业务逻辑, 根据需求来定义，
  */
 

@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.io.Serializable;
 
 /**
- * Created by goldze on 2017/5/11.
+ * @author mxlei
  */
 
 public class DownLoadStateBean implements Serializable, Parcelable {

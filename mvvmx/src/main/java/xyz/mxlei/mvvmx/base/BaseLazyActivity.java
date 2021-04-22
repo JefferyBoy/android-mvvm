@@ -2,21 +2,17 @@ package xyz.mxlei.mvvmx.base;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.trello.rxlifecycle2.components.support.RxFragment;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -28,59 +24,28 @@ import xyz.mxlei.mvvmx.utils.MaterialDialogUtils;
 
 /**
  * @author mxlei
- * @date 2020/12/16
  */
-public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends BaseViewModel> extends RxFragment implements IBaseView {
+public abstract class BaseLazyActivity<V extends ViewDataBinding, VM extends BaseViewModel> extends RxAppCompatActivity implements IBaseView {
     protected V binding;
     protected VM viewModel;
     private int viewModelId;
     private MaterialDialog dialog;
+
     private boolean isLoaded = false;
-
-    private LayoutInflater mLayoutInflater;
     private Bundle mSavedInstanceState;
-    private ViewGroup mViewGroup;
-    private FrameLayout mFragmentRoot;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initParam();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.mSavedInstanceState = savedInstanceState;
-        this.mLayoutInflater = inflater;
-        this.mViewGroup = container;
-
-        View view = inflater.inflate(initLoadingLayout(), container, false);
-        mFragmentRoot = view.findViewById(R.id.root_container);
-        return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (viewModel != null) {
-            viewModel.removeRxBus();
-        }
-        if (binding != null) {
-            binding.unbind();
-        }
+        setContentView(initLoadingLayout());
         isLoaded = false;
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
-        if (!isLoaded && !isHidden()) {
+        if (!isLoaded) {
             lazyInit(mSavedInstanceState);
             isLoaded = true;
             onLazyLoaded();
@@ -92,9 +57,10 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
     }
 
     private void lazyInit(@Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(mLayoutInflater, initContentView(mLayoutInflater, mViewGroup, savedInstanceState), mViewGroup, false);
+        //页面接受的参数方法
+        initParam();
         //私有的初始化Databinding和ViewModel方法
-        initViewDataBinding();
+        initViewDataBinding(savedInstanceState);
         //私有的ViewModel与View的契约事件回调逻辑
         registorUIChangeLiveDataCallBack();
         //页面数据初始化方法
@@ -103,17 +69,30 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
         initViewObservable();
         //注册RxBus
         viewModel.registerRxBus();
-        mFragmentRoot.removeAllViews();
-        mFragmentRoot.addView(binding.getRoot());
+        setContentView(binding.getRoot());
     }
 
     protected void onLazyLoaded() {
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (viewModel != null) {
+            viewModel.removeRxBus();
+        }
+        if (binding != null) {
+            binding.unbind();
+        }
+    }
+
     /**
      * 注入绑定
      */
-    private void initViewDataBinding() {
+    private void initViewDataBinding(Bundle savedInstanceState) {
+        //DataBindingUtil类需要在project的build中配置 dataBinding {enabled true }, 同步后会自动关联android.databinding包
+        binding = DataBindingUtil.setContentView(this, initContentView(savedInstanceState));
         viewModelId = initVariableId();
         viewModel = initViewModel();
         if (viewModel == null) {
@@ -127,12 +106,23 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
             }
             viewModel = (VM) createViewModel(this, modelClass);
         }
+        //关联ViewModel
         binding.setVariable(viewModelId, viewModel);
+        //viewModel中的liveData自动关联布局文件，不用手动写liveData.observer代码
+        binding.setLifecycleOwner(this);
         //让ViewModel拥有View的生命周期感应
         getLifecycle().addObserver(viewModel);
         //注入RxLifecycle生命周期
         viewModel.injectLifecycleProvider(this);
     }
+
+    //刷新布局
+    public void refreshLayout() {
+        if (viewModel != null) {
+            binding.setVariable(viewModelId, viewModel);
+        }
+    }
+
 
     /**
      * =====================================================================
@@ -140,21 +130,21 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
     //注册ViewModel与View的契约UI回调事件
     protected void registorUIChangeLiveDataCallBack() {
         //加载对话框显示
-        viewModel.getUC().getShowDialogEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+        viewModel.getUC().getShowDialogEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String title) {
                 showDialog(title);
             }
         });
         //加载对话框消失
-        viewModel.getUC().getDismissDialogEvent().observe(getViewLifecycleOwner(), new Observer<Void>() {
+        viewModel.getUC().getDismissDialogEvent().observe(this, new Observer<Void>() {
             @Override
             public void onChanged(@Nullable Void v) {
                 dismissDialog();
             }
         });
         //跳入新页面
-        viewModel.getUC().getStartActivityEvent().observe(getViewLifecycleOwner(), new Observer<Map<String, Object>>() {
+        viewModel.getUC().getStartActivityEvent().observe(this, new Observer<Map<String, Object>>() {
             @Override
             public void onChanged(@Nullable Map<String, Object> params) {
                 Class<?> clz = (Class<?>) params.get(ParameterField.CLASS);
@@ -162,13 +152,14 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
                 startActivity(clz, bundle);
             }
         });
-        viewModel.getUC().getstartActivityForResultEvent().observe(getViewLifecycleOwner(), new Observer<Map<String, Object>>() {
+        //跳入新页面
+        viewModel.getUc().getstartActivityForResultEvent().observe(this, new Observer<Map<String, Object>>() {
             @Override
             public void onChanged(@Nullable Map<String, Object> params) {
                 Class<?> clz = (Class<?>) params.get(ParameterField.CLASS);
                 Bundle bundle = (Bundle) params.get(ParameterField.BUNDLE);
                 int requestCode = (int) params.get(ParameterField.REQUEST_CODE);
-                Intent intent = new Intent(getContext(), clz);
+                Intent intent = new Intent(BaseLazyActivity.this, clz);
                 if (bundle != null) {
                     intent.putExtras(bundle);
                 }
@@ -176,7 +167,7 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
             }
         });
         //跳入ContainerActivity
-        viewModel.getUC().getStartContainerActivityEvent().observe(getViewLifecycleOwner(), new Observer<Map<String, Object>>() {
+        viewModel.getUC().getStartContainerActivityEvent().observe(this, new Observer<Map<String, Object>>() {
             @Override
             public void onChanged(@Nullable Map<String, Object> params) {
                 String canonicalName = (String) params.get(ParameterField.CANONICAL_NAME);
@@ -185,17 +176,17 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
             }
         });
         //关闭界面
-        viewModel.getUC().getFinishEvent().observe(getViewLifecycleOwner(), new Observer<Void>() {
+        viewModel.getUC().getFinishEvent().observe(this, new Observer<Void>() {
             @Override
             public void onChanged(@Nullable Void v) {
-                getActivity().finish();
+                finish();
             }
         });
         //关闭上一层
-        viewModel.getUC().getOnBackPressedEvent().observe(getViewLifecycleOwner(), new Observer<Void>() {
+        viewModel.getUC().getOnBackPressedEvent().observe(this, new Observer<Void>() {
             @Override
             public void onChanged(@Nullable Void v) {
-                getActivity().onBackPressed();
+                onBackPressed();
             }
         });
     }
@@ -205,7 +196,7 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
             dialog = dialog.getBuilder().title(title).build();
             dialog.show();
         } else {
-            MaterialDialog.Builder builder = MaterialDialogUtils.showIndeterminateProgressDialog(getActivity(), title, true);
+            MaterialDialog.Builder builder = MaterialDialogUtils.showIndeterminateProgressDialog(this, title, true);
             dialog = builder.show();
         }
     }
@@ -222,7 +213,7 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
      * @param clz 所跳转的目的Activity类
      */
     public void startActivity(Class<?> clz) {
-        startActivity(new Intent(getContext(), clz));
+        startActivity(new Intent(this, clz));
     }
 
     /**
@@ -232,7 +223,7 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
      * @param bundle 跳转所携带的信息
      */
     public void startActivity(Class<?> clz, Bundle bundle) {
-        Intent intent = new Intent(getContext(), clz);
+        Intent intent = new Intent(this, clz);
         if (bundle != null) {
             intent.putExtras(bundle);
         }
@@ -255,7 +246,7 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
      * @param bundle        跳转所携带的信息
      */
     public void startContainerActivity(String canonicalName, Bundle bundle) {
-        Intent intent = new Intent(getContext(), ContainerActivity.class);
+        Intent intent = new Intent(this, ContainerActivity.class);
         intent.putExtra(ContainerActivity.FRAGMENT, canonicalName);
         if (bundle != null) {
             intent.putExtra(ContainerActivity.BUNDLE, bundle);
@@ -266,14 +257,6 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
     /**
      * =====================================================================
      **/
-
-    //刷新布局
-    public void refreshLayout() {
-        if (viewModel != null) {
-            binding.setVariable(viewModelId, viewModel);
-        }
-    }
-
     @Override
     public void initParam() {
 
@@ -284,7 +267,7 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
      *
      * @return 布局layout的id
      */
-    public abstract int initContentView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
+    public abstract int initContentView(Bundle savedInstanceState);
 
     /**
      * 初始化ViewModel的id
@@ -312,10 +295,6 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
 
     }
 
-    public boolean isBackPressed() {
-        return false;
-    }
-
     /**
      * 创建ViewModel
      *
@@ -323,7 +302,7 @@ public abstract class BaseLazyFragment<V extends ViewDataBinding, VM extends Bas
      * @param <T>
      * @return
      */
-    public <T extends ViewModel> T createViewModel(Fragment fragment, Class<T> cls) {
-        return ViewModelProviders.of(fragment).get(cls);
+    public <T extends ViewModel> T createViewModel(FragmentActivity activity, Class<T> cls) {
+        return ViewModelProviders.of(activity).get(cls);
     }
 }

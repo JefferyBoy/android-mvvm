@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import xyz.mxlei.mvvmx.utils.Utils;
 
 /**
- * Created by goldze on 2017/6/15.
+ * @author mxlei
  */
 
 public class BaseApplication extends Application {

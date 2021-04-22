@@ -22,6 +22,7 @@ public class BindingImageView {
         //使用Glide加载图片
         Glide.with(imageView).load(url)
                 .apply(new RequestOptions().placeholder(placeHolderRes))
+                .dontAnimate()
                 .into(imageView);
     }
 }

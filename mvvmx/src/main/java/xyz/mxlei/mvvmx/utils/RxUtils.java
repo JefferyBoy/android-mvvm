@@ -18,7 +18,7 @@ import xyz.mxlei.mvvmx.http.BaseResponse;
 import xyz.mxlei.mvvmx.http.ExceptionHandle;
 
 /**
- * Created by goldze on 2017/6/19.
+ * @author mxlei
  * 有关Rx的工具类
  */
 public class RxUtils {

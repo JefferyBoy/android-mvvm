@@ -1,7 +1,7 @@
 package xyz.mxlei.mvvmx.utils.constant;
 
 /**
- * Created by goldze on 2017/5/14.
+ * @author mxlei
  * 正则相关常量
  */
 public final class RegexConstants {

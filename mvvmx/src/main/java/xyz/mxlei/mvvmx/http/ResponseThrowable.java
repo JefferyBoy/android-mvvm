@@ -1,7 +1,7 @@
 package xyz.mxlei.mvvmx.http;
 
 /**
- * Created by goldze on 2017/5/11.
+ * @author mxlei
  */
 
 public class ResponseThrowable extends Exception {

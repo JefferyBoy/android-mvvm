@@ -11,8 +11,6 @@ import androidx.databinding.BindingAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.mxlei.mvvmx.binding.command.BindingCommand;
-
 /**
  * @author mxlei
  * @date 2020/7/14
@@ -42,7 +40,7 @@ public class BindingSpinner {
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    command.execute(items.get(position));
+                    command.call(spinner, items.get(position));
                 }
 
                 @Override
@@ -52,8 +50,12 @@ public class BindingSpinner {
             });
         }
         //设置默认选中位置
-        if (selectedIndex < 0) selectedIndex = 0;
-        if (selectedIndex > items.size() - 1) selectedIndex = items.size() - 1;
+        if (selectedIndex < 0) {
+            selectedIndex = 0;
+        }
+        if (selectedIndex > items.size() - 1) {
+            selectedIndex = items.size() - 1;
+        }
         spinner.setSelection(selectedIndex);
     }
 }

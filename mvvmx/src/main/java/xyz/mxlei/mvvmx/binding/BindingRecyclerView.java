@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import xyz.mxlei.mvvmx.binding.command.BindingCommand;
-
 /**
  * @author mxlei
  * @date 2020/7/15
@@ -28,7 +26,7 @@ public class BindingRecyclerView {
                 super.onScrollStateChanged(recyclerView, newState);
                 state = newState;
                 if (onScrollStateChange != null) {
-                    onScrollStateChange.execute(newState);
+                    onScrollStateChange.call(recyclerView, newState);
                 }
             }
 
@@ -36,7 +34,7 @@ public class BindingRecyclerView {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (onScrollChange != null) {
-                    onScrollChange.execute(new ScrollDataWrapper(dx, dy, state));
+                    onScrollChange.call(recyclerView, new ScrollDataWrapper(dx, dy, state));
                 }
             }
         });

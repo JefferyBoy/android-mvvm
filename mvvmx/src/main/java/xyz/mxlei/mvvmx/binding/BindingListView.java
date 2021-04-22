@@ -7,9 +7,6 @@ import android.widget.ListView;
 
 import androidx.databinding.BindingAdapter;
 
-import xyz.mxlei.mvvmx.binding.command.BindingCommand;
-import xyz.mxlei.mvvmx.binding.command.ResponseCommand;
-
 /**
  * @author mxlei
  * @date 2020/7/14
@@ -25,26 +22,26 @@ public class BindingListView {
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 this.scrollState = scrollState;
                 if (onScrollStateChange != null) {
-                    onScrollStateChange.execute(scrollState);
+                    onScrollStateChange.call(view, scrollState);
                 }
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (onScrollChange != null) {
-                    onScrollChange.execute(new ListViewScrollDataWrapper(scrollState, firstVisibleItem, visibleItemCount, totalItemCount));
+                    onScrollChange.call(view, new ListViewScrollDataWrapper(scrollState, firstVisibleItem, visibleItemCount, totalItemCount));
                 }
             }
         });
     }
 
     @BindingAdapter(value = {"binding_onItemClick", "binding_onItemLongClick"}, requireAll = false)
-    public static void setAdapter2(ListView listView, final BindingCommand<Integer> click, final ResponseCommand<Integer, Boolean> longClick) {
+    public static void setAdapter2(final ListView listView, final BindingCommand<Integer> click, final BindingCommand<Integer> longClick) {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (click != null) {
-                    click.execute(position);
+                    click.call(view, position);
                 }
             }
         });
@@ -53,7 +50,8 @@ public class BindingListView {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 if (longClick != null) {
                     try {
-                        return longClick.execute(position);
+                        longClick.call(listView, position);
+                        return true;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
