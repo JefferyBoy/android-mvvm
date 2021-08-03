@@ -1,14 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion build_versions.compileSdkVersion
+    compileSdkVersion 30
     defaultConfig {
         applicationId 'xyz.mxlei.mvvmx'
-        minSdkVersion build_versions.minSdkVersion
-        targetSdkVersion build_versions.targetSdkVersion
-        versionCode build_versions.versionCode
-        versionName build_versions.versionName
-        multiDexEnabled true
+        minSdkVersion 22
+        targetSdkVersion 30
+        versionCode 1
+        versionName '1.0'
     }
     buildTypes {
         release {
@@ -20,27 +19,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    dataBinding {
-        enabled true
+    buildFeatures{
+        dataBinding true
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation support.design
-    implementation support.appcompat
-    implementation support.constraintlayout
-    implementation depends.multidex
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    debugImplementation depends.leakcanary
-    debugImplementation depends.leakcanary_fragment
+    implementation androidx.material
+    implementation androidx.cardview
+    implementation androidx.appcompat
+    implementation androidx.constraintlayout
+    implementation androidx.multidex
     //下拉刷新,上拉加载
-    implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
-    //底部tabBar
-    implementation('me.majiajie:pager-bottom-tab-strip:2.2.5') {
-        exclude group: 'com.android.support'
-    }
-//    implementation mxlei.mvvmx
+    implementation depends.smart_refresh_core
+    implementation depends.smart_refresh_header_classics
+    implementation depends.smart_refresh_footer_classics
+
     implementation project(':mvvmx')
 
+    debugImplementation depends.leakcanary
 }

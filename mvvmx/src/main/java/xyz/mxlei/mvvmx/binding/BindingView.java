@@ -78,7 +78,7 @@ public class BindingView {
     }
 
     @BindingAdapter(value = {"binding_onTouch"}, requireAll = false)
-    public static void setAdapter4(final View view, final BindingCommand<MotionEvent> command) {
+    public static void setAdapter4(final View view, final BindingCommand3<MotionEvent, Boolean> command) {
         view.setClickable(true);
         view.setFocusable(true);
         view.setOnTouchListener(new View.OnTouchListener() {
@@ -86,8 +86,7 @@ public class BindingView {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 try {
-                    command.call(view, event);
-                    return true;
+                    return command.call(view, event);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

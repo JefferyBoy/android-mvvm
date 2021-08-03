@@ -3,22 +3,20 @@ package xyz.mxlei.app.ui;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import xyz.mxlei.app.data.DataRepository;
 import xyz.mxlei.app.data.model.User;
-import xyz.mxlei.mvvmx.binding.command.BindingAction;
-import xyz.mxlei.mvvmx.binding.command.BindingCommand;
-import xyz.mxlei.mvvmx.binding.command.BindingConsumer;
-import xyz.mxlei.mvvmx.binding.command.ResponseCommand;
+import xyz.mxlei.mvvmx.base.BaseViewModel;
+import xyz.mxlei.mvvmx.binding.BindingCommand;
+import xyz.mxlei.mvvmx.binding.BindingCommand3;
 import xyz.mxlei.mvvmx.utils.KLog;
 import xyz.mxlei.mvvmx.utils.ToastUtils;
 
@@ -26,18 +24,16 @@ import xyz.mxlei.mvvmx.utils.ToastUtils;
  * @author mxlei
  * @date 2020/7/12
  */
-public class MainViewModel extends AndroidViewModel {
+public class MainViewModel extends BaseViewModel {
 
     public MutableLiveData<User> user;
-    public ObservableField<Float> imageTranslateX;
-    public ObservableField<Float> imageTranslateY;
+    public ObservableField<Float> imageTranslateX = new ObservableField<>(0f);
+    public ObservableField<Float> imageTranslateY = new ObservableField<>(0f);
 
     public MainViewModel(@NonNull Application application) {
         super(application);
         user = new MutableLiveData<>();
         user.setValue(DataRepository.sp().getLoginUser());
-        imageTranslateX = new ObservableField<>();
-        imageTranslateY = new ObservableField<>();
     }
 
     @SuppressLint("CheckResult")
@@ -56,49 +52,38 @@ public class MainViewModel extends AndroidViewModel {
                 });
     }
 
-    public BindingCommand clickLogin = new BindingCommand(new BindingAction() {
+    public BindingCommand clickLogin = new BindingCommand() {
         @Override
-        public void call() {
+        public void call(View view, Object item) {
             KLog.d("clickLogin");
         }
-    });
+    };
 
-    public BindingCommand switchCheckedChange = new BindingCommand<>(new BindingConsumer<Boolean>() {
+    public BindingCommand<Boolean> switchCheckedChange = new BindingCommand<Boolean>() {
         @Override
-        public void call(Boolean o) {
-            KLog.d("switchCheckedChange " + o);
+        public void call(View view, Boolean item) {
+            KLog.d("switchCheckedChange " + item);
         }
-    });
+    };
 
-    public ResponseCommand<MotionEvent, Boolean> onImageTouch = new ResponseCommand<>(new Function<MotionEvent, Boolean>() {
+    public BindingCommand3<MotionEvent, Boolean> onImageTouch = new BindingCommand3<MotionEvent, Boolean>() {
         private float x, y;
+        private float downTransX, downTransY;
 
         @Override
-        public Boolean apply(MotionEvent motionEvent) throws Exception {
+        public Boolean call(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 x = motionEvent.getRawX();
                 y = motionEvent.getRawY();
+                downTransX = view.getTranslationX();
+                downTransY = view.getTranslationY();
             }
             if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                 KLog.d("X = " + motionEvent.getX() + "\tY = " + motionEvent.getY());
-                imageTranslateX.set(motionEvent.getRawX() - x);
-                imageTranslateY.set(motionEvent.getRawY() - y);
+                imageTranslateX.set(downTransX + motionEvent.getRawX() - x);
+                imageTranslateY.set(downTransY + motionEvent.getRawY() - y);
             }
-            return false;
+            return true;
         }
-    });
-
-    public BindingCommand clickImage = new BindingCommand(new BindingAction() {
-        @Override
-        public void call() {
-            KLog.d("clickImage");
-        }
-    });
-
-    public BindingCommand clickLazy = new BindingCommand(new BindingAction() {
-        @Override
-        public void call() {
-
-        }
-    });
+    };
 }

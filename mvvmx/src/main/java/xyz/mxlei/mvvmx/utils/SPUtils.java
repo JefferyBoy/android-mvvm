@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import xyz.mxlei.mvvmx.base.BaseApplication;
+
 /**
  * @author mxlei
  * SharedPreferences工具类
@@ -35,7 +37,9 @@ public final class SPUtils {
      * @return {@link SPUtils}
      */
     public static SPUtils getInstance(String spName) {
-        if (isSpace(spName)) spName = "spUtils";
+        if (isSpace(spName)) {
+            spName = "spUtils";
+        }
         SPUtils sp = sSPMap.get(spName);
         if (sp == null) {
             sp = new SPUtils(spName);
@@ -45,7 +49,7 @@ public final class SPUtils {
     }
 
     private SPUtils(final String spName) {
-        sp = Utils.getContext().getSharedPreferences(spName, Context.MODE_PRIVATE);
+        sp = BaseApplication.getInstance().getSharedPreferences(spName, Context.MODE_PRIVATE);
     }
 
     /**
@@ -229,7 +233,7 @@ public final class SPUtils {
      * @return 存在返回对应值，不存在返回默认值{@code Collections.<String>emptySet()}
      */
     public Set<String> getStringSet(@NonNull final String key) {
-        return getStringSet(key, Collections.<String>emptySet());
+        return getStringSet(key, Collections.emptySet());
     }
 
     /**
@@ -283,7 +287,9 @@ public final class SPUtils {
     }
 
     private static boolean isSpace(final String s) {
-        if (s == null) return true;
+        if (s == null) {
+            return true;
+        }
         for (int i = 0, len = s.length(); i < len; ++i) {
             if (!Character.isWhitespace(s.charAt(i))) {
                 return false;

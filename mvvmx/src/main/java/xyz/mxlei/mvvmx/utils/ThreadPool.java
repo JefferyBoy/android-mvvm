@@ -15,45 +15,39 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ThreadUtils {
+public class ThreadPool {
     private static ExecutorService threadPool;
     private static Handler handler;
     private static final int POOL_SIZE = Integer.MAX_VALUE;
 
-    public static boolean isUIThread() {
+    public static boolean isMainLooper() {
         return Thread.currentThread().getId() == Looper.getMainLooper().getThread().getId();
     }
 
-    public static void onUIThread(Runnable runnable) {
+    public static void onMainLooper(Runnable runnable) {
         if (Thread.currentThread().getId() != Looper.getMainLooper().getThread().getId()) {
             if (handler == null) {
                 handler = new Handler(Looper.getMainLooper());
             }
-
             handler.post(runnable);
         } else {
             runnable.run();
         }
     }
 
-    public static void onNewThread(Runnable runnable) {
-        (new Thread(runnable)).start();
-    }
-
-    public static void onThreadPool(Runnable runnable) {
+    public static void onPool(Runnable runnable) {
         if (runnable != null) {
             if (threadPool == null) {
-                synchronized (ThreadUtils.class) {
+                synchronized (ThreadPool.class) {
                     if (threadPool == null) {
                         ThreadFactory threadFactory = new ThreadFactory() {
                             private final AtomicInteger threadNumber = new AtomicInteger(1);
-                            private final ThreadGroup group = new ThreadGroup("MVVMThreadUtil");
-                            private static final String NAME_PREFIX = "pool-";
+                            private final ThreadGroup group = new ThreadGroup("ThreadPool");
 
                             @Override
                             public Thread newThread(Runnable r) {
                                 Thread t = new Thread(group, r,
-                                        NAME_PREFIX + threadNumber.getAndIncrement(),
+                                        String.valueOf(threadNumber.getAndIncrement()),
                                         0);
                                 t.setDaemon(false);
                                 t.setPriority(Thread.NORM_PRIORITY);
@@ -67,20 +61,6 @@ public class ThreadUtils {
                 }
             }
             threadPool.execute(runnable);
-        }
-    }
-
-
-    /**
-     * 在非UI线程执行
-     * 若当前线程为UI线程--在线程池执行
-     * 若当前线程非UI线程--在当前线程执行
-     */
-    public static void onNotUIThread(Runnable runnable) {
-        if (Thread.currentThread().getId() == Looper.getMainLooper().getThread().getId()) {
-            onThreadPool(runnable);
-        } else {
-            runnable.run();
         }
     }
 }

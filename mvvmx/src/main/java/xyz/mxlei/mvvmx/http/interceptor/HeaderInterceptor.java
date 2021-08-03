@@ -1,5 +1,7 @@
 package xyz.mxlei.mvvmx.http.interceptor;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -11,13 +13,14 @@ import okhttp3.Response;
 /**
  * @author mxlei
  */
-public class BaseInterceptor implements Interceptor {
+public class HeaderInterceptor implements Interceptor {
     private final Map<String, String> headers;
 
-    public BaseInterceptor(Map<String, String> headers) {
+    public HeaderInterceptor(Map<String, String> headers) {
         this.headers = headers;
     }
 
+    @NonNull
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request.Builder builder = chain.request()

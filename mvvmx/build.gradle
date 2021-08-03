@@ -1,9 +1,8 @@
 apply plugin: 'com.android.library'
 
-version '1.2.10'
+version '2.0.0-SNAPSHOT'
 group 'com.gainscha'
 
-apply from: '../bintray.gradle'
 apply from: '../nexus.gradle'
 
 
@@ -32,35 +31,36 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    //support
-    api support.appcompat
-    api support.recyclerview
+    api androidx.appcompat
+    api androidx.annotation
+    api androidx.recyclerview
+    //lifecycle
+    api androidx.lifecycle_viewmodel
     //rxjava
-    api depends.rxjava
-    api depends.rxandroid
-    //rx管理View的生命周期
+    api depends.rxjava2
+    api depends.rxandroid2
     api depends.rxlifecycle
-    api depends.rxlifecycle_components
-    //rxbinding
-    api depends.rxbinding
+    api depends.rxlifecycle_android
+    api depends.rxlifecycle_android_lifecycle
     //rx权限请求
     api depends.rxpermissions
-    //network
+    //网络请求
     api depends.okhttp
-    api depends.retrofit
-    api depends.retrofit_converter_gson
-    api depends.retrofit_adapter_rxjava
+    api depends.retrofit2
+    api depends.retrofit2_converter_gson
+    api depends.retrofit2_adapter_rxjava2
     //json解析
     api depends.gson
-    //material-dialogs
-    api depends.material_dialogs_core
-    api depends.material_dialogs_commons
     //glide图片加载库
     api depends.glide
-    annotationProcessor depends.glide_compiler
-    //Google LiveData和ViewModel组件
-    api depends.lifecycle_extensions
-    annotationProcessor depends.lifecycle_compiler
+    //dataBinding的通用adapter
     api depends.bindingcollectionadapter
-    api depends['bindingcollectionadapter-recyclerview']
+    api depends.bindingcollectionadapter_recyclerview
+    //对话框
+    api depends.dialogx
+    api depends.dialogx_miui_style
+
+    //注解处理器
+    annotationProcessor androidx.lifecycle_compiler
+    annotationProcessor depends.glide_compiler
 }

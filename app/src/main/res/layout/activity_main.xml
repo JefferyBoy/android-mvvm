@@ -54,11 +54,5 @@
             android:layout_height="wrap_content"
             android:text="开关    "
             app:binding_onCheckedChange="@{viewmodel.switchCheckedChange}" />
-
-        <Button
-            android:id="@+id/btn_lazy_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="懒加载Fragment" />
     </LinearLayout>
 </layout>

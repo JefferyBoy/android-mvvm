@@ -18,6 +18,8 @@ import androidx.annotation.StringRes;
 
 import java.lang.ref.WeakReference;
 
+import xyz.mxlei.mvvmx.base.BaseApplication;
+
 /**
  * @author mxlei
  * 吐司工具类
@@ -26,9 +28,9 @@ public final class ToastUtils {
 
     private static final int DEFAULT_COLOR = 0x12000000;
     private static Toast sToast;
-    private static int gravity         = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
-    private static int xOffset         = 0;
-    private static int yOffset         = (int) (64 * Utils.getContext().getResources().getDisplayMetrics().density + 0.5);
+    private static int gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
+    private static int xOffset = 0;
+    private static int yOffset = (int) (64 * BaseApplication.getInstance().getResources().getDisplayMetrics().density + 0.5);
     private static int backgroundColor = DEFAULT_COLOR;
     private static int bgResource      = -1;
     private static int messageColor    = DEFAULT_COLOR;
@@ -58,7 +60,7 @@ public final class ToastUtils {
      * @param layoutId 视图
      */
     public static void setView(@LayoutRes int layoutId) {
-        LayoutInflater inflate = (LayoutInflater) Utils.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflate = (LayoutInflater) BaseApplication.getInstance().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         sViewWeakReference = new WeakReference<>(inflate.inflate(layoutId, null));
     }
 
@@ -83,7 +85,9 @@ public final class ToastUtils {
                 return view;
             }
         }
-        if (sToast != null) return sToast.getView();
+        if (sToast != null) {
+            return sToast.getView();
+        }
         return null;
     }
 
@@ -351,7 +355,7 @@ public final class ToastUtils {
      * @param duration 显示时长
      */
     private static void show(@StringRes int resId, int duration) {
-        show(Utils.getContext().getResources().getText(resId).toString(), duration);
+        show(BaseApplication.getInstance().getResources().getText(resId).toString(), duration);
     }
 
     /**
@@ -362,7 +366,7 @@ public final class ToastUtils {
      * @param args     参数
      */
     private static void show(@StringRes int resId, int duration, Object... args) {
-        show(String.format(Utils.getContext().getResources().getString(resId), args), duration);
+        show(String.format(BaseApplication.getInstance().getResources().getString(resId), args), duration);
     }
 
     /**
@@ -388,7 +392,7 @@ public final class ToastUtils {
         if (sViewWeakReference != null) {
             final View view = sViewWeakReference.get();
             if (view != null) {
-                sToast = new Toast(Utils.getContext());
+                sToast = new Toast(BaseApplication.getInstance());
                 sToast.setView(view);
                 sToast.setDuration(duration);
                 isCustom = true;
@@ -399,9 +403,9 @@ public final class ToastUtils {
                 SpannableString spannableString = new SpannableString(text);
                 ForegroundColorSpan colorSpan = new ForegroundColorSpan(messageColor);
                 spannableString.setSpan(colorSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                sToast = Toast.makeText(Utils.getContext(), spannableString, duration);
+                sToast = Toast.makeText(BaseApplication.getInstance(), spannableString, duration);
             } else {
-                sToast = Toast.makeText(Utils.getContext(), text, duration);
+                sToast = Toast.makeText(BaseApplication.getInstance(), text, duration);
             }
         }
         View view = sToast.getView();

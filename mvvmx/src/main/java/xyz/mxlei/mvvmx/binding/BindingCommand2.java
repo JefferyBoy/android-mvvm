@@ -6,7 +6,7 @@ import android.view.View;
  * @author mxlei
  * @date 2020/12/19
  */
-public interface BindingCommandEx {
+public interface BindingCommand2 {
 
     void call(View view, Object... item);
 }

@@ -2,6 +2,8 @@ package xyz.mxlei.mvvmx.http.interceptor.logging;
 
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -23,14 +25,15 @@ import okhttp3.internal.platform.Platform;
 
 public class LoggingInterceptor implements Interceptor {
 
-    private boolean isDebug;
-    private Builder builder;
+    private final boolean isDebug;
+    private final Builder builder;
 
     private LoggingInterceptor(Builder builder) {
         this.builder = builder;
         this.isDebug = builder.isDebug;
     }
 
+    @NonNull
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
@@ -113,7 +116,7 @@ public class LoggingInterceptor implements Interceptor {
         private String requestTag;
         private String responseTag;
         private Level level = Level.BASIC;
-        private Headers.Builder builder;
+        private final Headers.Builder builder;
         private Logger logger;
 
         public Builder() {

@@ -4,8 +4,8 @@ import android.content.Context;
 
 import androidx.fragment.app.Fragment;
 
-import com.trello.rxlifecycle2.LifecycleProvider;
-import com.trello.rxlifecycle2.LifecycleTransformer;
+import com.trello.rxlifecycle4.LifecycleProvider;
+import com.trello.rxlifecycle4.LifecycleTransformer;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -40,9 +40,9 @@ public class RxUtils {
      *
      * @param lifecycle Fragment
      */
-    public static LifecycleTransformer bindToLifecycle(@NonNull Fragment lifecycle) {
+    public static <T> LifecycleTransformer<T> bindToLifecycle(@NonNull Fragment lifecycle) {
         if (lifecycle instanceof LifecycleProvider) {
-            return ((LifecycleProvider) lifecycle).bindToLifecycle();
+            return ((LifecycleProvider<T>) lifecycle).bindToLifecycle();
         } else {
             throw new IllegalArgumentException("fragment not the LifecycleProvider type");
         }
@@ -53,7 +53,7 @@ public class RxUtils {
      *
      * @param lifecycle Fragment
      */
-    public static LifecycleTransformer bindToLifecycle(@NonNull LifecycleProvider lifecycle) {
+    public static <T> LifecycleTransformer<T> bindToLifecycle(@NonNull LifecycleProvider<T> lifecycle) {
         return lifecycle.bindToLifecycle();
     }
 
@@ -92,9 +92,10 @@ public class RxUtils {
     private static class HandleFuc<T> implements Function<BaseResponse<T>, T> {
         @Override
         public T apply(BaseResponse<T> response) {
-            if (!response.isOk())
-                throw new RuntimeException(!"".equals(response.getCode() + "" + response.getMessage()) ? response.getMessage() : "");
-            return response.getResult();
+            if (!response.isOk()) {
+                throw new RuntimeException(!"".equals(response.getCode() + "" + response.getMsg()) ? response.getMsg() : "");
+            }
+            return response.getData();
         }
     }
 

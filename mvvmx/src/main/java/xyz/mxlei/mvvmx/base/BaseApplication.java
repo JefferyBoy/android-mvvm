@@ -1,12 +1,18 @@
 package xyz.mxlei.mvvmx.base;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 
-import xyz.mxlei.mvvmx.utils.Utils;
+import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.style.MIUIStyle;
+
+import xyz.mxlei.mvvmx.crash.CaocConfig;
 
 /**
  * @author mxlei
@@ -18,7 +24,30 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        setApplication(this);
+        if (isMainProcess()) {
+            setApplication(this);
+        }
+    }
+
+    /**
+     * 判断当前进程是否为主进程
+     */
+    public boolean isMainProcess() {
+        int pid = android.os.Process.myPid();
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo appProcess : activityManager.getRunningAppProcesses()) {
+            if (appProcess.pid == pid) {
+                return getApplicationInfo().packageName.equals(appProcess.processName);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 是判断当前线程否为主线程
+     */
+    public boolean isMainThread() {
+        return Looper.getMainLooper() == Looper.myLooper();
     }
 
     /**
@@ -28,8 +57,6 @@ public class BaseApplication extends Application {
      */
     public static synchronized void setApplication(@NonNull Application application) {
         sInstance = application;
-        //初始化工具类
-        Utils.init(application);
         //注册监听每个activity的生命周期,便于堆栈式管理
         application.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 
@@ -63,6 +90,32 @@ public class BaseApplication extends Application {
                 AppManager.getAppManager().removeActivity(activity);
             }
         });
+        //DialogX初始化
+        DialogX.init(application);
+        DialogX.DEBUGMODE = false;
+        DialogX.globalStyle = MIUIStyle.style();
+        DialogX.globalTheme = DialogX.THEME.AUTO;
+        DialogX.dialogMaxWidth = application.getResources().getDisplayMetrics().widthPixels;
+        DialogX.autoShowInputKeyboard = true;
+        DialogX.onlyOnePopTip = false;
+        DialogX.cancelable = true;
+        DialogX.cancelableTipDialog = false;
+        DialogX.cancelButtonText = application.getString(android.R.string.cancel);
+        //崩溃检测
+        CaocConfig.Builder.create()
+                //背景模式,开启沉浸式
+                .backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT)
+                //是否启动全局异常捕获
+                .enabled(true)
+                //是否显示错误详细信息
+                .showErrorDetails(true)
+                //是否显示重启按钮
+                .showRestartButton(true)
+                //是否跟踪Activity
+                .trackActivities(true)
+                //崩溃的间隔时间(毫秒)
+                .minTimeBetweenCrashesMs(2000)
+                .apply();
     }
 
     /**

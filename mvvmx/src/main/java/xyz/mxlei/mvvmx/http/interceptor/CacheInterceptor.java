@@ -2,6 +2,8 @@ package xyz.mxlei.mvvmx.http.interceptor;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 
 import okhttp3.CacheControl;
@@ -22,6 +24,7 @@ public class CacheInterceptor implements Interceptor {
         this.context = context;
     }
 
+    @NonNull
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();

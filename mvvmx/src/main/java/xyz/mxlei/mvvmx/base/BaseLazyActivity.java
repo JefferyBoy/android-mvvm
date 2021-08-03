@@ -4,15 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.kongzue.dialogx.dialogs.WaitDialog;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -20,16 +20,14 @@ import java.util.Map;
 
 import xyz.mxlei.mvvmx.R;
 import xyz.mxlei.mvvmx.base.BaseViewModel.ParameterField;
-import xyz.mxlei.mvvmx.utils.MaterialDialogUtils;
 
 /**
  * @author mxlei
  */
-public abstract class BaseLazyActivity<V extends ViewDataBinding, VM extends BaseViewModel> extends RxAppCompatActivity implements IBaseView {
+public abstract class BaseLazyActivity<V extends ViewDataBinding, VM extends BaseViewModel> extends AppCompatActivity implements IBaseView {
     protected V binding;
     protected VM viewModel;
     private int viewModelId;
-    private MaterialDialog dialog;
 
     private boolean isLoaded = false;
     private Bundle mSavedInstanceState;
@@ -113,7 +111,7 @@ public abstract class BaseLazyActivity<V extends ViewDataBinding, VM extends Bas
         //让ViewModel拥有View的生命周期感应
         getLifecycle().addObserver(viewModel);
         //注入RxLifecycle生命周期
-        viewModel.injectLifecycleProvider(this);
+        viewModel.injectLifecycleOwner(this);
     }
 
     //刷新布局
@@ -192,19 +190,11 @@ public abstract class BaseLazyActivity<V extends ViewDataBinding, VM extends Bas
     }
 
     public void showDialog(String title) {
-        if (dialog != null) {
-            dialog = dialog.getBuilder().title(title).build();
-            dialog.show();
-        } else {
-            MaterialDialog.Builder builder = MaterialDialogUtils.showIndeterminateProgressDialog(this, title, true);
-            dialog = builder.show();
-        }
+        WaitDialog.show(title);
     }
 
     public void dismissDialog() {
-        if (dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
-        }
+        WaitDialog.dismiss();
     }
 
     /**
@@ -303,6 +293,6 @@ public abstract class BaseLazyActivity<V extends ViewDataBinding, VM extends Bas
      * @return
      */
     public <T extends ViewModel> T createViewModel(FragmentActivity activity, Class<T> cls) {
-        return ViewModelProviders.of(activity).get(cls);
+        return ViewModelProvider.AndroidViewModelFactory.getInstance(activity.getApplication()).create(cls);
     }
 }

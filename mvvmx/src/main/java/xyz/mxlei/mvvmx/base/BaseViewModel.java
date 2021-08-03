@@ -12,7 +12,8 @@ import androidx.lifecycle.Observer;
 
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.trello.rxlifecycle2.LifecycleProvider;
+import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle;
+import com.trello.rxlifecycle4.LifecycleProvider;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -27,21 +28,15 @@ import xyz.mxlei.mvvmx.utils.RxUtils;
 /**
  * @author mxlei
  */
-public class BaseViewModel<M extends BaseModel> extends AndroidViewModel implements IBaseViewModel, Consumer<Disposable> {
-    protected M model;
+public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, Consumer<Disposable> {
     private UIChangeLiveData uc;
     //弱引用持有
-    private WeakReference<LifecycleProvider> lifecycle;
+    private WeakReference<LifecycleProvider<Lifecycle.Event>> lifecycle;
     //管理RxJava，主要针对RxJava异步操作造成的内存泄漏
     private CompositeDisposable mCompositeDisposable;
 
     public BaseViewModel(@NonNull Application application) {
-        this(application, null);
-    }
-
-    public BaseViewModel(@NonNull Application application, M model) {
         super(application);
-        this.model = model;
         mCompositeDisposable = new CompositeDisposable();
     }
 
@@ -57,11 +52,11 @@ public class BaseViewModel<M extends BaseModel> extends AndroidViewModel impleme
      *
      * @param lifecycle
      */
-    public void injectLifecycleProvider(LifecycleProvider lifecycle) {
-        this.lifecycle = new WeakReference<>(lifecycle);
+    public void injectLifecycleOwner(LifecycleOwner lifecycle) {
+        this.lifecycle = new WeakReference<>(AndroidLifecycle.createLifecycleProvider(lifecycle));
     }
 
-    public LifecycleProvider getLifecycleProvider() {
+    public LifecycleProvider<Lifecycle.Event> getLifecycleProvider() {
         return lifecycle.get();
     }
 
@@ -218,9 +213,6 @@ public class BaseViewModel<M extends BaseModel> extends AndroidViewModel impleme
     @Override
     protected void onCleared() {
         super.onCleared();
-        if (model != null) {
-            model.onCleared();
-        }
         //ViewModel销毁时会执行，同时取消所有异步任务
         if (mCompositeDisposable != null) {
             mCompositeDisposable.clear();
