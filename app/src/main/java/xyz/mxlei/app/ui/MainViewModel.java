@@ -23,6 +23,7 @@ import xyz.mxlei.mvvmx.utils.ToastUtils;
  * @author mxlei
  * @date 2020/7/12
  */
+@SuppressLint("CheckResult")
 public class MainViewModel extends BaseViewModel {
 
     public MutableLiveData<User> user;
@@ -35,13 +36,13 @@ public class MainViewModel extends BaseViewModel {
         user.setValue(DataRepository.sp().getLoginUser());
     }
 
-    @SuppressLint("CheckResult")
     public void login() {
         KLog.d("login " + user.getValue().getName() + "\t" + user.getValue().getPassword());
         DataRepository.sp().setLoginUser(user.getValue());
         DataRepository.http()
                 .login(user.getValue().getName(), user.getValue().getPassword())
                 .compose(RxUtils.schedulersTransformer())
+                .compose(RxUtils.bindToLifecycle(getLifecycleProvider()))
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) throws Exception {

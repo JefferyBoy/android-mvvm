@@ -1,9 +1,6 @@
 package xyz.mxlei.mvvmx.utils;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 
 import com.trello.rxlifecycle4.LifecycleProvider;
@@ -23,62 +20,40 @@ import xyz.mxlei.mvvmx.http.ExceptionHandle;
  * 有关Rx的工具类
  */
 public class RxUtils {
-    /**
-     * 生命周期绑定
-     *
-     * @param lifecycle Activity
-     */
-    public static LifecycleTransformer bindToLifecycle(@NonNull Context lifecycle) {
-        if (lifecycle instanceof LifecycleProvider) {
-            return ((LifecycleProvider) lifecycle).bindToLifecycle();
-        } else {
-            throw new IllegalArgumentException("context not the LifecycleProvider type");
-        }
-    }
 
     /**
      * 生命周期绑定
      *
      * @param lifecycle Fragment
      */
-    public static LifecycleTransformer bindToLifecycle(@NonNull Fragment lifecycle) {
-        if (lifecycle instanceof LifecycleProvider) {
-            return ((LifecycleProvider) lifecycle).bindToLifecycle();
-        } else {
-            throw new IllegalArgumentException("fragment not the LifecycleProvider type");
-        }
-    }
-
-    /**
-     * 生命周期绑定
-     *
-     * @param lifecycle Fragment
-     */
-    public static LifecycleTransformer bindToLifecycle(@NonNull LifecycleProvider<Lifecycle.Event> lifecycle) {
+    public static <T> LifecycleTransformer<T> bindToLifecycle(@NonNull LifecycleProvider<Lifecycle.Event> lifecycle) {
         return lifecycle.bindToLifecycle();
     }
 
     /**
      * 线程调度器
      */
-    public static ObservableTransformer schedulersTransformer() {
-        return new ObservableTransformer() {
+    public static <T> ObservableTransformer<T, T> schedulersTransformer() {
+        return new ObservableTransformer<T, T>() {
+            @NonNull
             @Override
-            public ObservableSource apply(Observable upstream) {
+            public ObservableSource<T> apply(@NonNull Observable<T> upstream) {
                 return upstream.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
 
-    public static ObservableTransformer exceptionTransformer() {
-
-        return new ObservableTransformer() {
+    /**
+     * 异常处理
+     */
+    public static <T> ObservableTransformer<T, T> exceptionTransformer() {
+        return new ObservableTransformer<T, T>() {
+            @NonNull
             @Override
-            public ObservableSource apply(Observable observable) {
+            public ObservableSource<T> apply(@NonNull Observable<T> observable) {
                 return observable
-//                        .map(new HandleFuc<T>())  //这里可以取出BaseResponse中的Result
-                        .onErrorResumeNext(new HttpResponseFunc());
+                        .onErrorResumeNext(new HttpResponseFunc<T>());
             }
         };
     }
