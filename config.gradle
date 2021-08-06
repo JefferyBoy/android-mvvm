@@ -5,6 +5,7 @@
 ext {
     //官方标准库
     androidx = [
+            "ktx"                          : "androidx.core:core-ktx:1.3.2",
             'annotation'                   : "androidx.annotation:annotation:1.2.0",
             'appcompat'                    : "androidx.appcompat:appcompat:1.3.1",
             'fragment'                     : "androidx.fragment:fragment:1.3.6",
@@ -23,8 +24,12 @@ ext {
             'cardview'                     : "androidx.cardview:cardview:1.0.0",
             //界面路由跳转
             'navigation_ui'                : "androidx.navigation:navigation-ui:2.3.5",
+            'navigation_ui_ktx'            : "androidx.navigation:navigation-ui-ktx:2.3.5",
             'navigation_fragment'          : "androidx.navigation:navigation-fragment:2.3.5",
+            'navigation_fragment_ktx'      : "androidx.navigation:navigation-fragment-ktx:2.3.5",
             'navigation_fragment_fuature'  : "androidx.navigation:navigation-dynamic-features-fragment:2.3.5",
+            //插件库，自动生成传输传递的代码，避免bundle传参数出现错误，使用此库中的插件：androidx.navigation.safeargs或androidx.navigation.safeargs.kotlin
+            'navigation_gradle_plugin'     : "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5",
 
             //数据库
             'room'                         : "androidx.room:room-runtime:2.3.0",
@@ -74,13 +79,14 @@ ext {
             //安卓5.0以上的webkit，使用新的API
             'webkit'                       : "androidx.webkit:webkit:1.4.0",
 
-            //后台运行的异步任务、延迟运行、定时运行（使用携程）
+            //后台运行的异步任务、延迟运行、定时运行（使用携程），2.1.0以上版本需要JDK1.8
             'work'                         : "androidx.work:work-runtime:2.5.0",
             'work_ktx'                     : "androidx.work:work-runtime-ktx:2.5.0",
             'work_rxjava2'                 : "androidx.work:work-rxjava2:2.5.0",
     ]
     //jetbrains官方库
     jetbrains = [
+            "kotlin_gradle_plugin"          : "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21",
             "kotlin_std"                    : "org.jetbrains.kotlin:kotlin-stdlib:1.5.21",
             "kotlin_std_jdk7"               : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.21",
             "kotlin_std_jdk8"               : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.21",
@@ -93,10 +99,8 @@ ext {
             //内存泄露检测
             "leakcanary"                           : "com.squareup.leakcanary:leakcanary-android:2.7",
             //rxjava
-            "rxjava2"                              : "io.reactivex.rxjava2:rxjava:2.2.21",
-            "rxjava3"                              : "io.reactivex.rxjava2:rxjava:3.0.13",
-            "rxandroid2"                           : "io.reactivex.rxjava2:rxandroid:2.1.1",
-            "rxandroid3"                           : "io.reactivex.rxjava2:rxandroid:3.0.0",
+            "rxjava"                               : "io.reactivex.rxjava3:rxjava:3.0.13",
+            "rxandroid"                            : "io.reactivex.rxjava3:rxandroid:3.0.0",
             //rxLifecycle核心
             "rxlifecycle"                          : "com.trello.rxlifecycle4:rxlifecycle:4.0.2",
             //提供绑定安卓的LifeCycle
@@ -106,14 +110,16 @@ ext {
             //没有提供RxActivity和RxFragment，需要手动创建LifeCycleProvider
             "rxlifecycle_android_lifecycle"        : "com.trello.rxlifecycle4:rxlifecycle-android-lifecycle:4.0.2",
             //动态权限申请
-            "rxpermissions"                        : "com.github.tbruyelle:rxpermissions:v0.11",
+            "rxpermissions"                        : "com.github.tbruyelle:rxpermissions:v0.12",
             //网络请求客户端
             "okhttp"                               : "com.squareup.okhttp3:okhttp:3.14.9",
+            "okhttp_logging_interceptor"           : "com.squareup.okhttp3:logging-interceptor:3.14.9",
             "okhttp_ktx"                           : "com.squareup.okhttp3:okhttp:4.9.1",
+            "okhttp_ktx_logging_interceptor"       : "com.squareup.okhttp3:logging-interceptor:4.9.1",
             //基于注解的HTTP请求实现
             "retrofit2"                            : "com.squareup.retrofit2:retrofit:2.9.0",
             "retrofit2_converter_gson"             : "com.squareup.retrofit2:converter-gson:2.9.0",
-            "retrofit2_adapter_rxjava2"            : "com.squareup.retrofit2:adapter-rxjava2:2.9.0",
+            "retrofit2_adapter_rxjava"             : "com.squareup.retrofit2:adapter-rxjava3:2.9.0",
             //图片加载
             "glide"                                : "com.github.bumptech.glide:glide:4.12.0",
             "glide_compiler"                       : "com.github.bumptech.glide:compiler:4.12.0",
@@ -174,13 +180,31 @@ ext {
     ]
     gainscha = [
             //安卓mvvm基础框架
-            "mvvmx"            : "xyz.mxlei:mvvmx:2.0.0-SNAPSHOT",
+            "mvvmx"            : "com.gainscha:mvvmx:2.0.0-20210803.082505-3",
             //zxing安卓,增加扫码界面
-            "zxing"            : "xyz.mxlei:zxing:1.1.9",
-            //图片选择器
-            "picturepick"      : "xyz.mxlei:picturepick:1.2.2",
+            "zxing"            : "com.gainscha:zxing:1.1.9",
             //easyexcel简化版
-            "easyexcel-android": "xyz.mxlei:easyexcel-android:1.0"
+            "easyexcel-android": "com.gainscha:easyexcel-android:1.0",
+            //佳博打印机SDK
+            'printersdk'       : 'com.gainscha:sdk:2.5.3',
+            //条码二维码
+            'barcode'          : 'com.gainscha:sdk-zxing:1.2.1',
+            //zint条码库
+            'jzint'            : 'com.gainscha:jzint:0.2.7',
+            //图片选择
+            'picturepick'      : 'com.gainscha:picturepick:1.2.5',
+            //友盟统计
+            'umeng'            : 'com.gainscha:lib-umeng:1.2.2',
+            //百度语音
+            'baidu-asr'        : 'com.gainscha:lib-baidu-asr:1.0.2',
+            //百度OCR
+            'baidu-ocr'        : 'com.gainscha:lib-baidu-ocr:1.0.2'
+    ]
+    //测试
+    test = [
+            "junit"        : "junit:junit:4.13",
+            "junit_android": "androidx.test.ext:junit:1.1.1",
+            "espresso"     : "androidx.test.espresso:espresso-core:3.2.0"
     ]
 }
 

@@ -10,8 +10,8 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
-import com.tbruyelle.rxpermissions2.Permission;
-import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.tbruyelle.rxpermissions3.Permission;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle;
 import com.trello.rxlifecycle4.LifecycleProvider;
 
@@ -19,9 +19,9 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
 import xyz.mxlei.mvvmx.bus.event.SingleLiveEvent;
 import xyz.mxlei.mvvmx.utils.RxUtils;
 
@@ -151,7 +151,7 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
     /**
      * 动态申请权限
      */
-    public void requestPermission(FragmentActivity activity, io.reactivex.Observer<Permission> observer, String... permissions) {
+    public void requestPermission(FragmentActivity activity, io.reactivex.rxjava3.core.Observer<Permission> observer, String... permissions) {
         if (permissions.length > 0) {
             RxPermissions rxPermissions = new RxPermissions(activity);
             rxPermissions.requestEach(permissions)

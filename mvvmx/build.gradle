@@ -37,8 +37,8 @@ dependencies {
     //lifecycle
     api androidx.lifecycle_viewmodel
     //rxjava
-    api depends.rxjava2
-    api depends.rxandroid2
+    api depends.rxjava
+    api depends.rxandroid
     api depends.rxlifecycle
     api depends.rxlifecycle_android
     api depends.rxlifecycle_android_lifecycle
@@ -46,9 +46,10 @@ dependencies {
     api depends.rxpermissions
     //网络请求
     api depends.okhttp
+    api depends.okhttp_logging_interceptor
     api depends.retrofit2
     api depends.retrofit2_converter_gson
-    api depends.retrofit2_adapter_rxjava2
+    api depends.retrofit2_adapter_rxjava
     //json解析
     api depends.gson
     //glide图片加载库

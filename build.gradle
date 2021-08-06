@@ -27,3 +27,7 @@ task clean(type: Delete) {
 
 tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 1, 'minutes'
+}
+

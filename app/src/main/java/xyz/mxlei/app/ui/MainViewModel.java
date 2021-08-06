@@ -9,15 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.functions.Consumer;
 import xyz.mxlei.app.data.DataRepository;
 import xyz.mxlei.app.data.model.User;
 import xyz.mxlei.mvvmx.base.BaseViewModel;
 import xyz.mxlei.mvvmx.binding.BindingCommand;
 import xyz.mxlei.mvvmx.binding.BindingCommand3;
 import xyz.mxlei.mvvmx.utils.KLog;
+import xyz.mxlei.mvvmx.utils.RxUtils;
 import xyz.mxlei.mvvmx.utils.ToastUtils;
 
 /**
@@ -42,8 +41,7 @@ public class MainViewModel extends BaseViewModel {
         DataRepository.sp().setLoginUser(user.getValue());
         DataRepository.http()
                 .login(user.getValue().getName(), user.getValue().getPassword())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtils.schedulersTransformer())
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) throws Exception {

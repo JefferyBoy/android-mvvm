@@ -1,6 +1,7 @@
 package xyz.mxlei.mvvmx.bus;
 
-import io.reactivex.observers.DisposableObserver;
+
+import io.reactivex.rxjava3.observers.DisposableObserver;
 
 /**
  * @author mxlei

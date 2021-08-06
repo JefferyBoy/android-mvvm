@@ -2,18 +2,19 @@ package xyz.mxlei.mvvmx.utils;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 
 import com.trello.rxlifecycle4.LifecycleProvider;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.ObservableTransformer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableSource;
+import io.reactivex.rxjava3.core.ObservableTransformer;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import xyz.mxlei.mvvmx.http.BaseResponse;
 import xyz.mxlei.mvvmx.http.ExceptionHandle;
 
@@ -27,7 +28,7 @@ public class RxUtils {
      *
      * @param lifecycle Activity
      */
-    public static <T> LifecycleTransformer<T> bindToLifecycle(@NonNull Context lifecycle) {
+    public static LifecycleTransformer bindToLifecycle(@NonNull Context lifecycle) {
         if (lifecycle instanceof LifecycleProvider) {
             return ((LifecycleProvider) lifecycle).bindToLifecycle();
         } else {
@@ -40,9 +41,9 @@ public class RxUtils {
      *
      * @param lifecycle Fragment
      */
-    public static <T> LifecycleTransformer<T> bindToLifecycle(@NonNull Fragment lifecycle) {
+    public static LifecycleTransformer bindToLifecycle(@NonNull Fragment lifecycle) {
         if (lifecycle instanceof LifecycleProvider) {
-            return ((LifecycleProvider<T>) lifecycle).bindToLifecycle();
+            return ((LifecycleProvider) lifecycle).bindToLifecycle();
         } else {
             throw new IllegalArgumentException("fragment not the LifecycleProvider type");
         }
@@ -53,7 +54,7 @@ public class RxUtils {
      *
      * @param lifecycle Fragment
      */
-    public static <T> LifecycleTransformer<T> bindToLifecycle(@NonNull LifecycleProvider<T> lifecycle) {
+    public static LifecycleTransformer bindToLifecycle(@NonNull LifecycleProvider<Lifecycle.Event> lifecycle) {
         return lifecycle.bindToLifecycle();
     }
 
