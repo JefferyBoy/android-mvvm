@@ -10,7 +10,7 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 
 import com.kongzue.dialogx.DialogX;
-import com.kongzue.dialogx.style.MIUIStyle;
+import com.kongzue.dialogx.style.MaterialStyle;
 
 import xyz.mxlei.mvvmx.crash.CaocConfig;
 
@@ -93,14 +93,13 @@ public class BaseApplication extends Application {
         //DialogX初始化
         DialogX.init(application);
         DialogX.DEBUGMODE = false;
-        DialogX.globalStyle = MIUIStyle.style();
+        DialogX.globalStyle = MaterialStyle.style();
         DialogX.globalTheme = DialogX.THEME.AUTO;
         DialogX.dialogMaxWidth = application.getResources().getDisplayMetrics().widthPixels;
         DialogX.autoShowInputKeyboard = true;
         DialogX.onlyOnePopTip = false;
         DialogX.cancelable = true;
         DialogX.cancelableTipDialog = false;
-        DialogX.cancelButtonText = application.getString(android.R.string.cancel);
         //崩溃检测
         CaocConfig.Builder.create()
                 //背景模式,开启沉浸式

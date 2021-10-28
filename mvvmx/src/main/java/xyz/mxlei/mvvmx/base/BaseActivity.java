@@ -7,9 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.kongzue.dialogx.dialogs.WaitDialog;
@@ -75,7 +73,7 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
                 //如果没有指定泛型参数，则默认使用BaseViewModel
                 modelClass = BaseViewModel.class;
             }
-            viewModel = (VM) createViewModel(this, modelClass);
+            viewModel = (VM) new ViewModelProvider(this).get(modelClass);
         }
         //关联ViewModel
         binding.setVariable(viewModelId, viewModel);
@@ -256,16 +254,5 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
     @Override
     public void initViewObservable() {
 
-    }
-
-    /**
-     * 创建ViewModel
-     *
-     * @param cls
-     * @param <T>
-     * @return
-     */
-    public <T extends ViewModel> T createViewModel(FragmentActivity activity, Class<T> cls) {
-        return ViewModelProvider.AndroidViewModelFactory.getInstance(activity.getApplication()).create(cls);
     }
 }

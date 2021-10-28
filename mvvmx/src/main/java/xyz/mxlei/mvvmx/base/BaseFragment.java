@@ -12,7 +12,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.kongzue.dialogx.dialogs.WaitDialog;
@@ -34,7 +33,6 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initParam();
     }
 
     @Override
@@ -45,6 +43,7 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        initParam();
         binding = DataBindingUtil.inflate(inflater, initContentView(inflater, container, savedInstanceState), container, false);
         return binding.getRoot();
     }
@@ -90,7 +89,7 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
                 //如果没有指定泛型参数，则默认使用BaseViewModel
                 modelClass = BaseViewModel.class;
             }
-            viewModel = (VM) createViewModel(this, modelClass);
+            viewModel = (VM) new ViewModelProvider(this).get(modelClass);
         }
         binding.setVariable(viewModelId, viewModel);
         //让ViewModel拥有View的生命周期感应
@@ -273,14 +272,4 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
         return false;
     }
 
-    /**
-     * 创建ViewModel
-     *
-     * @param cls
-     * @param <T>
-     * @return
-     */
-    public <T extends ViewModel> T createViewModel(Fragment fragment, Class<T> cls) {
-        return ViewModelProvider.AndroidViewModelFactory.getInstance(fragment.getActivity().getApplication()).create(cls);
-    }
 }

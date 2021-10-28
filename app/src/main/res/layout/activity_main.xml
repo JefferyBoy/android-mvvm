@@ -15,7 +15,6 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="16dp"
         tools:context="xyz.mxlei.app.ui.MainActivity">
 
         <ImageView

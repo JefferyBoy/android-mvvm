@@ -3,7 +3,6 @@ package xyz.mxlei.mvvmx.base;
 import android.app.Application;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.Lifecycle;
@@ -35,8 +34,8 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
     //管理RxJava，主要针对RxJava异步操作造成的内存泄漏
     private CompositeDisposable mCompositeDisposable;
 
-    public BaseViewModel(@NonNull Application application) {
-        super(application);
+    public BaseViewModel(Application app) {
+        super(app);
         mCompositeDisposable = new CompositeDisposable();
     }
 
@@ -280,4 +279,6 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
         public static String BUNDLE = "BUNDLE";
         public static String REQUEST_CODE = "REQUEST_CODE";
     }
+
+
 }
