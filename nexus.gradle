@@ -1,21 +1,32 @@
 apply plugin: 'maven-publish'
 
+def getLocalProperties() {
+    Properties localProperties = new Properties()
+    File file = project.rootProject.file('local.properties')
+    if (file.exists()) {
+        localProperties.load(file.newReader("UTF-8"))
+    }
+    return localProperties
+}
+// get Local Properties
+Properties localProperties = getLocalProperties()
+
 // debug仓库
-def SNAPSHOT_REPOSITORY_URL = 'http://118.31.6.84:8081/repository/maven-snapshots/'
+def SNAPSHOT_REPOSITORY_URL = localProperties.get("nexusRepoSnapshot")
 // release仓库
-def RELEASE_REPOSITORY_URL = 'http://118.31.6.84:8081/repository/maven-releases/'
+def RELEASE_REPOSITORY_URL = localProperties.get("nexusRepo")
 // maven 账户
-def REPOSITORY_USER_NAME = 'mxlei'
-def REPOSITORY_USER_PSW = 'dachui666'
+def REPOSITORY_USER_NAME = localProperties.get("nexusUserName")
+def REPOSITORY_USER_PSW = localProperties.get("nexusUserPsw")
 def POM_GROUP_ID = project.group.toString()
 def POM_ARTIFACT_ID = project.name
 def VERSION_NAME = project.version.toString()
 def POM_NAME = project.name
 def POM_DESCRIPTION = ''
 def POM_SCM_URL = ''
-def POM_DEVELOPER_ID = 'mxlei'
-def POM_DEVELOPER_NAME = 'mxlei'
-def POM_DEVELOPER_EMAIL = 'mx_lei@126.com'
+def POM_DEVELOPER_ID = localProperties.get("nexusUserName")
+def POM_DEVELOPER_NAME = localProperties.get("nexusUserName")
+def POM_DEVELOPER_EMAIL = localProperties.get("nexusUserMail")
 
 afterEvaluate {
     publishing {

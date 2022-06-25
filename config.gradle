@@ -153,21 +153,21 @@ ext {
             "dialogx_ios_style"                    : "com.kongzue.dialogx:DialogXIOSStyle:0.0.44.beta17",
 
             //刷新核心库
-            "smart_refresh_core"                   : "io.github.scwang90:refresh-layout-kernel:2.0.3",
+            "smart_refresh_core"                   : "io.github.scwang90:refresh-layout-kernel:2.0.5",
             //经典刷新头
-            "smart_refresh_header_classics"        : "io.github.scwang90:refresh-header-classics:2.0.3",
+            "smart_refresh_header_classics"        : "io.github.scwang90:refresh-header-classics:2.0.5",
             //雷达刷新头
-            "smart_refresh_header_radar"           : "io.github.scwang90:refresh-header-radar:2.0.3",
+            "smart_refresh_header_radar"           : "io.github.scwang90:refresh-header-radar:2.0.5",
             //虚拟刷新头
-            "smart_refresh_header_falsify"         : "io.github.scwang90:refresh-header-falsify:2.0.3",
+            "smart_refresh_header_falsify"         : "io.github.scwang90:refresh-header-falsify:2.0.5",
             //谷歌刷新头
-            "smart_refresh_header_material"        : "io.github.scwang90:refresh-header-material:2.0.3",
+            "smart_refresh_header_material"        : "io.github.scwang90:refresh-header-material:2.0.5",
             //二级刷新头
-            "smart_refresh_header_two_level"       : "io.github.scwang90:refresh-header-two-level:2.0.3",
+            "smart_refresh_header_two_level"       : "io.github.scwang90:refresh-header-two-level:2.0.5",
             //球脉冲加载
-            "smart_refresh_footer_ball"            : "io.github.scwang90:refresh-footer-ball:2.0.3",
+            "smart_refresh_footer_ball"            : "io.github.scwang90:refresh-footer-ball:2.0.5",
             //经典加载
-            "smart_refresh_footer_classics"        : "io.github.scwang90:refresh-footer-classics:2.0.3",
+            "smart_refresh_footer_classics"        : "io.github.scwang90:refresh-footer-classics:2.0.5",
 
             //使用GPU进行图片滤镜处理
             "gpuimage"                             : "jp.co.cyberagent.android:gpuimage:2.0.4",
