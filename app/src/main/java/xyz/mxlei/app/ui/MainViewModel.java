@@ -27,6 +27,7 @@ import xyz.mxlei.mvvmx.utils.ToastUtils;
 public class MainViewModel extends BaseViewModel {
 
     public MutableLiveData<User> user;
+    public ObservableField<String> username = new ObservableField<>("guo");
     public ObservableField<Float> imageTranslateX = new ObservableField<>(0f);
     public ObservableField<Float> imageTranslateY = new ObservableField<>(0f);
 

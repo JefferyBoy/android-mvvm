@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:hint="用户名"
             android:minWidth="200dp"
-            android:text="@={viewmodel.user.name}" />
+            android:text="@={viewmodel.username}" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -45,6 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="登录"
+            android:onClick="@{(v)->viewmodel.clickLogin}"
             app:binding_isThrottleFirst="@{true}"
             app:binding_onClick="@{viewmodel.clickLogin}" />
 

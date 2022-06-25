@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 
-version '2.0.1'
+version '2.0.2-SNAPSHOT'
 group 'com.gainscha'
 
 apply from: '../nexus.gradle'
@@ -32,7 +32,6 @@ android {
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     api androidx.appcompat
-    api androidx.annotation
     api androidx.recyclerview
     //lifecycle
     api androidx.lifecycle_viewmodel

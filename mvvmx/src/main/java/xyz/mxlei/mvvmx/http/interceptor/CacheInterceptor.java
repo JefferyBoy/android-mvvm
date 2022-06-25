@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -30,12 +31,13 @@ public class CacheInterceptor implements Interceptor {
         Request request = chain.request();
         if (NetworkUtil.isNetworkAvailable(context)) {
             Response response = chain.proceed(request);
-            // read from cache for 60 s
-            int maxAge = 60;
+            CacheControl cacheControl = new CacheControl.Builder()
+                    .maxAge(60, TimeUnit.MINUTES)
+                    .build();
             return response.newBuilder()
                     .removeHeader("Pragma")
                     .removeHeader("Cache-Control")
-                    .header("Cache-Control", "public, max-age=" + maxAge)
+                    .header("Cache-Control", cacheControl.toString())
                     .build();
         } else {
             //读取缓存信息

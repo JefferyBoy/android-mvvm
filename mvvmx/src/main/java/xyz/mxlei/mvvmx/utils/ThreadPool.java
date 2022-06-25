@@ -36,17 +36,13 @@ public class ThreadPool {
     }
 
     public static void onMainLooper(Runnable runnable, long delay) {
-        if (Thread.currentThread().getId() != Looper.getMainLooper().getThread().getId()) {
-            if (handler == null) {
-                handler = new Handler(Looper.getMainLooper());
-            }
-            if (delay > 0) {
-                handler.postDelayed(runnable, delay);
-            } else {
-                handler.post(runnable);
-            }
+        if (handler == null) {
+            handler = new Handler(Looper.getMainLooper());
+        }
+        if (delay > 0) {
+            handler.postDelayed(runnable, delay);
         } else {
-            runnable.run();
+            handler.post(runnable);
         }
     }
 

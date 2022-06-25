@@ -11,13 +11,14 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenLocal()
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
         maven {
             url "http://118.31.6.84:8081/repository/maven-public/"
             allowInsecureProtocol true
         }
+        maven { url 'https://jitpack.io' }
     }
 }
 

@@ -1,14 +1,17 @@
 package xyz.mxlei.mvvmx.base;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.core.util.Pair;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
+import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.tbruyelle.rxpermissions3.Permission;
 import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle;
@@ -39,7 +42,7 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
         mCompositeDisposable = new CompositeDisposable();
     }
 
-    protected void addSubscribe(Disposable disposable) {
+    public void addSubscribe(Disposable disposable) {
         if (mCompositeDisposable == null) {
             mCompositeDisposable = new CompositeDisposable();
         }
@@ -78,11 +81,15 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
     }
 
     public void showDialog(String title) {
-        uc.showDialogEvent.postValue(title);
+        WaitDialog.show(title);
     }
 
     public void dismissDialog() {
-        uc.dismissDialogEvent.call();
+        WaitDialog.dismiss();
+    }
+
+    public void setResult(int resultCode, Intent intent) {
+        uc.getSetResultEvent().setValue(new Pair<>(resultCode, intent));
     }
 
     /**
@@ -183,6 +190,8 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
 
     @Override
     public void onDestroy() {
+        WaitDialog.dismiss();
+        onCleared();
     }
 
     @Override
@@ -231,6 +240,7 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
         private SingleLiveEvent<Map<String, Object>> startActivityForResultEvent;
         private SingleLiveEvent<Void> finishEvent;
         private SingleLiveEvent<Void> onBackPressedEvent;
+        private SingleLiveEvent<Pair<Integer, Intent>> setResultEvent;
 
         public SingleLiveEvent<String> getShowDialogEvent() {
             return showDialogEvent = createLiveData(showDialogEvent);
@@ -258,6 +268,10 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
 
         public SingleLiveEvent<Void> getOnBackPressedEvent() {
             return onBackPressedEvent = createLiveData(onBackPressedEvent);
+        }
+
+        public SingleLiveEvent<Pair<Integer, Intent>> getSetResultEvent() {
+            return setResultEvent = createLiveData(setResultEvent);
         }
 
         private <T> SingleLiveEvent<T> createLiveData(SingleLiveEvent<T> liveData) {

@@ -148,26 +148,26 @@ ext {
             "luban"                                : "top.zibin:Luban:1.1.8",
 
             //多种统一风格的dialog
-            "dialogx"                              : "com.github.kongzue.DialogX:DialogX:0.0.40",
-            "dialogx_miui_style"                   : "com.github.kongzue.DialogX:DialogXMIUIStyle:0.0.40",
-            "dialogx_ios_style"                    : "com.github.kongzue.DialogX:DialogXIOSStyle:0.0.40",
+            "dialogx"                              : "com.kongzue.dialogx:DialogX:0.0.45",
+            "dialogx_miui_style"                   : "com.kongzue.dialogx:DialogXMIUIStyle:0.0.44.beta17",
+            "dialogx_ios_style"                    : "com.kongzue.dialogx:DialogXIOSStyle:0.0.44.beta17",
 
             //刷新核心库
-            "smart_refresh_core"                   : "com.scwang.smart:refresh-layout-kernel:2.0.3",
+            "smart_refresh_core"                   : "io.github.scwang90:refresh-layout-kernel:2.0.3",
             //经典刷新头
-            "smart_refresh_header_classics"        : "com.scwang.smart:refresh-header-classics:2.0.3",
+            "smart_refresh_header_classics"        : "io.github.scwang90:refresh-header-classics:2.0.3",
             //雷达刷新头
-            "smart_refresh_header_radar"           : "com.scwang.smart:refresh-header-radar:2.0.3",
+            "smart_refresh_header_radar"           : "io.github.scwang90:refresh-header-radar:2.0.3",
             //虚拟刷新头
-            "smart_refresh_header_falsify"         : "com.scwang.smart:refresh-header-falsify:2.0.3",
+            "smart_refresh_header_falsify"         : "io.github.scwang90:refresh-header-falsify:2.0.3",
             //谷歌刷新头
-            "smart_refresh_header_material"        : "com.scwang.smart:refresh-header-material:2.0.3",
+            "smart_refresh_header_material"        : "io.github.scwang90:refresh-header-material:2.0.3",
             //二级刷新头
-            "smart_refresh_header_two_level"       : "com.scwang.smart:refresh-header-two-level:2.0.3",
+            "smart_refresh_header_two_level"       : "io.github.scwang90:refresh-header-two-level:2.0.3",
             //球脉冲加载
-            "smart_refresh_footer_ball"            : "com.scwang.smart:refresh-footer-ball:2.0.3",
+            "smart_refresh_footer_ball"            : "io.github.scwang90:refresh-footer-ball:2.0.3",
             //经典加载
-            "smart_refresh_footer_classics"        : "com.scwang.smart:refresh-footer-classics:2.0.3",
+            "smart_refresh_footer_classics"        : "io.github.scwang90:refresh-footer-classics:2.0.3",
 
             //使用GPU进行图片滤镜处理
             "gpuimage"                             : "jp.co.cyberagent.android:gpuimage:2.0.4",

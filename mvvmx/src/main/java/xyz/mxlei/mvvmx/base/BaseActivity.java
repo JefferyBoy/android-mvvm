@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.Observer;
@@ -51,7 +52,7 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
         if (viewModel != null) {
             viewModel.removeRxBus();
         }
-        if(binding != null){
+        if (binding != null) {
             binding.unbind();
         }
     }
@@ -128,11 +129,11 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
                 Class<?> clz = (Class<?>) params.get(BaseViewModel.ParameterField.CLASS);
                 Bundle bundle = (Bundle) params.get(BaseViewModel.ParameterField.BUNDLE);
                 int requestCode = (int) params.get(BaseViewModel.ParameterField.REQUEST_CODE);
-                Intent intent = new Intent(BaseActivity.this,clz);
+                Intent intent = new Intent(BaseActivity.this, clz);
                 if (bundle != null) {
                     intent.putExtras(bundle);
                 }
-                startActivityForResult(intent,requestCode);
+                startActivityForResult(intent, requestCode);
             }
         });
         //跳入ContainerActivity
@@ -156,6 +157,13 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
             @Override
             public void onChanged(@Nullable Void v) {
                 onBackPressed();
+            }
+        });
+        //setResult
+        viewModel.getUC().getSetResultEvent().observe(this, new Observer<Pair<Integer, Intent>>() {
+            @Override
+            public void onChanged(Pair<Integer, Intent> pair) {
+                setResult(pair.first, pair.second);
             }
         });
     }
