@@ -1,5 +1,7 @@
 package xyz.mxlei.mvvmx.utils;
 
+import static xyz.mxlei.mvvmx.utils.Utils.getContext;
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -51,16 +53,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableSource;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import xyz.mxlei.mvvmx.utils.compression.Luban;
-
-import static xyz.mxlei.mvvmx.utils.Utils.getContext;
 
 /**
  * @author mxlei

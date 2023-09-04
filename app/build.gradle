@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion build_versions.compileSdkVersion
+    compileSdk = 33
     defaultConfig {
         applicationId 'xyz.mxlei.mvvmx'
-        minSdkVersion build_versions.minSdkVersion
-        targetSdkVersion build_versions.targetSdkVersion
-        versionCode build_versions.versionCode
-        versionName build_versions.versionName
+        minSdk = 30
+        targetSdk = 30
+        versionCode 1
+        versionName "1.0"
         multiDexEnabled true
     }
     buildTypes {
@@ -20,18 +20,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    dataBinding {
-        enabled true
+    buildFeatures {
+        dataBinding true
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation support.design
-    implementation support.appcompat
-    implementation support.constraintlayout
-    implementation depends.multidex
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation androidx.material
+    implementation androidx.appcompat
+    implementation androidx.constraintlayout
+    implementation depends.retrofit
+    implementation depends.retrofit_converter_gson
+    implementation depends.retrofit_adapter_rxjava
     debugImplementation depends.leakcanary
     debugImplementation depends.leakcanary_fragment
     //下拉刷新,上拉加载

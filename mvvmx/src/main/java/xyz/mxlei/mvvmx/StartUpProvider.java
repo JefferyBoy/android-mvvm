@@ -14,21 +14,69 @@
  * limitations under the License.
  */
 
-package xyz.mxlei.mvvmx.crash;
+package xyz.mxlei.mvvmx;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import xyz.mxlei.mvvmx.base.AppManager;
+import xyz.mxlei.mvvmx.crash.CustomActivityOnCrash;
+import xyz.mxlei.mvvmx.utils.Utils;
 
-public class CaocInitProvider extends ContentProvider {
+
+/**
+ * @author mxlei
+ */
+public class StartUpProvider extends ContentProvider {
 
     public boolean onCreate() {
-        CustomActivityOnCrash.install(getContext());
+        Context context = getContext().getApplicationContext();
+        // 初始化工具类
+        Utils.init(context);
+        // 崩溃捕获
+        CustomActivityOnCrash.install(context);
+        //注册监听每个activity的生命周期,便于堆栈式管理
+        ((Application) context).registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                AppManager.getAppManager().addActivity(activity);
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                AppManager.getAppManager().removeActivity(activity);
+            }
+        });
         return false;
     }
 
@@ -59,5 +107,4 @@ public class CaocInitProvider extends ContentProvider {
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
         return 0;
     }
-
 }

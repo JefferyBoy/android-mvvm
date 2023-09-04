@@ -17,12 +17,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableSource;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class Luban {
@@ -31,7 +30,7 @@ public class Luban {
     public static final int THIRD_GEAR = 3;
 
     private static final String TAG = "smartcity";
-    private static String DEFAULT_DISK_CACHE_DIR = "smartcity_disk_cache";
+    private static final String DEFAULT_DISK_CACHE_DIR = "smartcity_disk_cache";
 
     private static volatile Luban INSTANCE;
 
@@ -92,74 +91,53 @@ public class Luban {
     }
 
     public static Luban get(Context context) {
-        if (INSTANCE == null) INSTANCE = new Luban(Luban.getPhotoCacheDir(context));
+        if (INSTANCE == null) {
+            INSTANCE = new Luban(Luban.getPhotoCacheDir(context));
+        }
         return INSTANCE;
     }
 
     public Luban launch() {
         Preconditions.checkNotNull(mFile, "the image file cannot be null, please call .load() before this method!");
 
-        if (compressListener != null) compressListener.onStart();
-        if (gear == Luban.FIRST_GEAR)
+        if (compressListener != null) {
+            compressListener.onStart();
+        }
+        if (gear == Luban.FIRST_GEAR) {
             Observable.just(mFile)
-                    .map(new Function<String, File>() {
-                        @Override
-                        public File apply(String s) throws Exception {
-                            File file = new File(s);
-                            return firstCompress(file);
-                        }
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            if (compressListener != null) compressListener.onError(throwable);
-                        }
-                    })
-                    .onErrorResumeNext(Observable.<File>empty())
-                    .filter(new Predicate<File>() {
-                        @Override
-                        public boolean test(File file) throws Exception {
-                            return file != null;
-                        }
-                    })
-                    .subscribe(new Consumer<File>() {
-                        @Override
-                        public void accept(File file) throws Exception {
-                            if (compressListener != null) compressListener.onSuccess(file);
-                        }
-                    });
-        else if (gear == Luban.THIRD_GEAR)
+                .map(s -> {
+                    File file = new File(s);
+                    return firstCompress(file);
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(throwable -> {
+                    if (compressListener != null) compressListener.onError(throwable);
+                })
+                .onErrorResumeNext(e -> {
+                    return Observable.empty();
+                })
+                .filter(file -> file != null)
+                .subscribe(file -> {
+                    if (compressListener != null) compressListener.onSuccess(file);
+                });
+        } else if (gear == Luban.THIRD_GEAR) {
             Observable.just(mFile)
-                    .map(new Function<String, File>() {
-                        @Override
-                        public File apply(String s) throws Exception {
-                            File file = new File(s);
-                            return thirdCompress(file);
-                        }
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                            if (compressListener != null) compressListener.onError(throwable);
-                        }
-                    })
-                    .onErrorResumeNext(Observable.<File>empty())
-                    .filter(new Predicate<File>() {
-                        @Override
-                        public boolean test(File file) throws Exception {
-                            return file != null;
-                        }
-                    })
-                    .subscribe(new Consumer<File>() {
-                        @Override
-                        public void accept(File file) throws Exception {
-                            if (compressListener != null) compressListener.onSuccess(file);
-                        }
-                    });
+                .map(s -> {
+                    File file = new File(s);
+                    return thirdCompress(file);
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(throwable -> {
+                    if (compressListener != null) compressListener.onError(throwable);
+                })
+                .onErrorResumeNext((Function<? super Throwable, ? extends ObservableSource<? extends File>>) Observable.<File>empty())
+                .filter(file -> file != null)
+                .subscribe(file -> {
+                    if (compressListener != null) compressListener.onSuccess(file);
+                });
+        }
         return this;
     }
 
@@ -266,7 +244,7 @@ public class Luban {
 
     private File thirdCompress(@NonNull File file) {
         String thumb = mCacheDir.getAbsolutePath() + File.separator +
-                (TextUtils.isEmpty(filename) ? System.currentTimeMillis() : filename) + ".jpg";
+            (TextUtils.isEmpty(filename) ? System.currentTimeMillis() : filename) + ".jpg";
 
         double size;
         String filePath = file.getAbsolutePath();
@@ -331,7 +309,7 @@ public class Luban {
 
         String filePath = file.getAbsolutePath();
         String thumbFilePath = mCacheDir.getAbsolutePath() + File.separator +
-                (TextUtils.isEmpty(filename) ? System.currentTimeMillis() : filename) + ".jpg";
+            (TextUtils.isEmpty(filename) ? System.currentTimeMillis() : filename) + ".jpg";
 
         long size = 0;
         long maxSize = file.length() / 5;

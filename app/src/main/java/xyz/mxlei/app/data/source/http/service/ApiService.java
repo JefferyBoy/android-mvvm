@@ -1,6 +1,6 @@
 package xyz.mxlei.app.data.source.http.service;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.POST;
 

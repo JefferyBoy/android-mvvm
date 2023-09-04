@@ -1,38 +1,15 @@
 # Android-MVVM-Framework
 1. DataBinding+LiveData+ViewModel框架为基础
 2. 整合Okhttp+RxJava+Retrofit+Glide等流行模块
-3. 各种原生控件自定义的BindingAdapter，让事件与数据源完美绑定的一款容易上瘾的实用性MVVM快速开发框架。从此告别findViewById()，告别setText()，告别setOnClickListener()
 
 ## 框架特点
 - **快速开发**
 
-	只需要写项目的业务逻辑，不用再去关心网络请求、权限申请、View的生命周期等问题，撸起袖子就是干。
+  只需要写项目的业务逻辑，不用再去关心网络请求、权限申请、View的生命周期等问题。
 
 - **维护方便**
 
 	MVVM开发模式，低耦合，逻辑分明。Model层负责将请求的数据交给ViewModel；ViewModel层负责将请求到的数据做业务逻辑处理，最后交给View层去展示，与View一一对应；View层只负责界面绘制刷新，不处理业务逻辑，非常适合分配独立模块开发。
-
-- **流行框架**
-
-	[retrofit](https://github.com/square/retrofit)+[okhttp](https://github.com/square/okhttp)+[rxJava](https://github.com/ReactiveX/RxJava)负责网络请求；[gson](https://github.com/google/gson)负责解析json数据；[glide](https://github.com/bumptech/glide)负责加载图片；[rxlifecycle](https://github.com/trello/RxLifecycle)负责管理view的生命周期；与网络请求共存亡；[rxbinding](https://github.com/JakeWharton/RxBinding)结合databinding扩展UI事件；[rxpermissions](https://github.com/tbruyelle/RxPermissions)负责Android 6.0权限申请；[material-dialogs](https://github.com/afollestad/material-dialogs)一个漂亮的、流畅的、可定制的material design风格的对话框。
-
-- **数据绑定**
-
-	满足google目前控件支持的databinding双向绑定，并扩展原控件一些不支持的数据绑定。例如将图片的url路径绑定到ImageView控件中，在BindingAdapter方法里面则使用Glide加载图片；View的OnClick事件在BindingAdapter中方法使用RxView防重复点击，再把事件回调到ViewModel层，实现xml与ViewModel之间数据和事件的绑定(框架里面部分扩展控件和回调命令使用的是@kelin原创的)。
-
-- **基类封装**
-
-	专门针对MVVM模式打造的BaseActivity、BaseFragment、BaseViewModel，在View层中不再需要定义ViewDataBinding和ViewModel，直接在BaseActivity、BaseFragment上限定泛型即可使用。普通界面只需要编写Fragment，然后使用ContainerActivity盛装(代理)，这样就不需要每个界面都在AndroidManifest中注册一遍。
-
-- **全局操作**
-	1. 全局的Activity堆栈式管理，在程序任何地方可以打开、结束指定的Activity，一键退出应用程序。
-	2. LoggingInterceptor全局拦截网络请求日志，打印Request和Response，格式化json、xml数据显示，方便与后台调试接口。
-	3. 全局Cookie，支持SharedPreferences和内存两种管理模式。
-	4. 通用的网络请求异常监听，根据不同的状态码或异常设置相应的message。
-	5. 全局的异常捕获，程序发生异常时不会崩溃，可跳入异常界面重启应用。
-	6. 全局事件回调，提供RxBus、Messenger两种回调方式。
-	7. 全局任意位置一行代码实现文件下载进度监听（暂不支持多文件进度监听）。
-    8. 全局点击事件防抖动处理，防止点击过快。
 
 
 ## 1、准备工作
@@ -48,6 +25,7 @@ dataBinding {
 从远程依赖：
 
 在根目录的build.gradle中加入
+
 ```gradle
 allprojects {
     repositories {
@@ -55,31 +33,21 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
+        //佳博打印SDK仓库
+        maven("http://118.31.6.84:8081/repository/maven-public/") {
+            isAllowInsecureProtocol = true
+        }
     }
 }
 ```
 在主项目app的build.gradle中依赖
 ```gradle
 dependencies {
-    ...
-    implementation 'xyz.xmlei:mvvmx:1.2.5'
+    implementation 'com.gainscha:mvvmx:2.0.2-SNAPSHOT'
 }
 ```
-### 1.3、配置config.gradle
-如果不是远程依赖，而是下载的例子程序，那么还需要将例子程序中的config.gradle放入你的主项目根目录中，然后在根目录build.gradle的第一行加入：
 
-```gradle
-apply from: "config.gradle"
-```
-
-**注意：** config.gradle中的 
-
-android = [] 是你的开发相关版本配置，可自行修改
-
-support = [] 是你的support相关配置，可自行修改
-
-dependencies = [] 是依赖第三方库的配置，可以加新库，但不要去修改原有第三方库的版本号，不然可能会编译不过
-### 1.4、配置AndroidManifest
+### 1.3、配置AndroidManifest
 添加权限：
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
@@ -689,19 +657,3 @@ ImageUtils.compressWithRx(filePaths, new Subscriber() {
     }
 });
 ```
-### 3.6、其他辅助类
-**ToastUtils：** 吐司工具类
-
-**MaterialDialogUtils：** Material风格对话框工具类
-
-**SPUtils：** SharedPreferences工具类
-
-**SDCardUtils：** SD卡相关工具类
-
-**ConvertUtils：** 转换相关工具类
-
-**StringUtils：** 字符串相关工具类
-
-**RegexUtils：** 正则相关工具类
-
-**KLog：** 日志打印，含json格式打印

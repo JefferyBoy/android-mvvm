@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewmodel"
             type="xyz.mxlei.app.ui.MainViewModel" />
@@ -24,7 +23,6 @@
             android:layout_height="100dp"
             android:translationX="@{viewmodel.imageTranslateX}"
             android:translationY="@{viewmodel.imageTranslateY}"
-            app:binding_onTouch="@{viewmodel.onImageTouch}"
             app:binding_placeholderRes="@{@drawable/apple}"
             app:binding_src='@{"https://gprinter.oss-cn-hangzhou.aliyuncs.com/code.jpg"}' />
 
@@ -47,13 +45,12 @@
             android:layout_height="wrap_content"
             android:text="登录"
             app:binding_isThrottleFirst="@{true}"
-            app:binding_onClick="@{viewmodel.clickLogin}" />
+            android:onClick="@{viewmodel.clickLogin}" />
 
         <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="开关    "
-            app:binding_onCheckedChange="@{viewmodel.switchCheckedChange}" />
+            android:text="开关    " />
 
         <Button
             android:id="@+id/btn_lazy_fragment"
