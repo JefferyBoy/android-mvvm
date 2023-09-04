@@ -1,23 +1,13 @@
 package xyz.mxlei.mvvmx.base;
 
 import android.app.Application;
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.core.util.Pair;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
-import com.kongzue.dialogx.dialogs.WaitDialog;
-import com.tbruyelle.rxpermissions3.Permission;
-import com.tbruyelle.rxpermissions3.RxPermissions;
-import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle;
-import com.trello.rxlifecycle4.LifecycleProvider;
-
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,41 +15,32 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import xyz.mxlei.mvvmx.bus.event.SingleLiveEvent;
-import xyz.mxlei.mvvmx.utils.RxUtils;
+import xyz.mxlei.mvvmx.utils.Utils;
 
 /**
  * @author mxlei
  */
 public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, Consumer<Disposable> {
     private UIChangeLiveData uc;
-    //弱引用持有
-    private WeakReference<LifecycleProvider<Lifecycle.Event>> lifecycle;
-    //管理RxJava，主要针对RxJava异步操作造成的内存泄漏
+    /**
+     * 管理RxJava，主要针对RxJava异步操作造成的内存泄漏
+     */
     private CompositeDisposable mCompositeDisposable;
+
+    public BaseViewModel() {
+        super((Application) Utils.getContext());
+    }
 
     public BaseViewModel(Application app) {
         super(app);
         mCompositeDisposable = new CompositeDisposable();
     }
 
-    public void addSubscribe(Disposable disposable) {
+    protected void addSubscribe(Disposable disposable) {
         if (mCompositeDisposable == null) {
             mCompositeDisposable = new CompositeDisposable();
         }
         mCompositeDisposable.add(disposable);
-    }
-
-    /**
-     * 注入RxLifecycle生命周期
-     *
-     * @param lifecycle
-     */
-    public void injectLifecycleOwner(LifecycleOwner lifecycle) {
-        this.lifecycle = new WeakReference<>(AndroidLifecycle.createLifecycleProvider(lifecycle));
-    }
-
-    public LifecycleProvider<Lifecycle.Event> getLifecycleProvider() {
-        return lifecycle.get();
     }
 
     public UIChangeLiveData getUC() {
@@ -76,20 +57,13 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
         return uc;
     }
 
-    public void showDialog() {
-        showDialog("请稍后...");
+
+    public void showLoadingDialog(String title) {
+        uc.showDialogEvent.postValue(title);
     }
 
-    public void showDialog(String title) {
-        WaitDialog.show(title);
-    }
-
-    public void dismissDialog() {
-        WaitDialog.dismiss();
-    }
-
-    public void setResult(int resultCode, Intent intent) {
-        uc.getSetResultEvent().setValue(new Pair<>(resultCode, intent));
+    public void dismissLoadingDialog() {
+        uc.dismissDialogEvent.call();
     }
 
     /**
@@ -116,30 +90,6 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
         uc.getStartActivityEvent().postValue(params);
     }
 
-    /**
-     * 跳转容器页面
-     *
-     * @param canonicalName 规范名 : Fragment.class.getCanonicalName()
-     */
-    public void startContainerActivity(String canonicalName) {
-        startContainerActivity(canonicalName, null);
-    }
-
-    /**
-     * 跳转容器页面
-     *
-     * @param canonicalName 规范名 : Fragment.class.getCanonicalName()
-     * @param bundle        跳转所携带的信息
-     */
-    public void startContainerActivity(String canonicalName, Bundle bundle) {
-        Map<String, Object> params = new HashMap<>();
-        params.put(ParameterField.CANONICAL_NAME, canonicalName);
-        if (bundle != null) {
-            params.put(ParameterField.BUNDLE, bundle);
-        }
-        uc.getStartContainerActivityEvent().postValue(params);
-    }
-
     public void startActivityForResult(Class<?> clz, int request_code) {
         startActivityForResult(clz, request_code, null);
     }
@@ -151,19 +101,7 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
             params.put(ParameterField.BUNDLE, bundle);
         }
         params.put(ParameterField.REQUEST_CODE, request_code);
-        uc.getstartActivityForResultEvent().postValue(params);
-    }
-
-    /**
-     * 动态申请权限
-     */
-    public void requestPermission(FragmentActivity activity, io.reactivex.rxjava3.core.Observer<Permission> observer, String... permissions) {
-        if (permissions.length > 0) {
-            RxPermissions rxPermissions = new RxPermissions(activity);
-            rxPermissions.requestEach(permissions)
-                    .compose(RxUtils.schedulersTransformer())
-                    .subscribe(observer);
-        }
+        uc.getStartActivityForResultEvent().postValue(params);
     }
 
     /**
@@ -190,8 +128,6 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
 
     @Override
     public void onDestroy() {
-        WaitDialog.dismiss();
-        onCleared();
     }
 
     @Override
@@ -236,17 +172,15 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
         private SingleLiveEvent<String> showDialogEvent;
         private SingleLiveEvent<Void> dismissDialogEvent;
         private SingleLiveEvent<Map<String, Object>> startActivityEvent;
-        private SingleLiveEvent<Map<String, Object>> startContainerActivityEvent;
         private SingleLiveEvent<Map<String, Object>> startActivityForResultEvent;
         private SingleLiveEvent<Void> finishEvent;
         private SingleLiveEvent<Void> onBackPressedEvent;
-        private SingleLiveEvent<Pair<Integer, Intent>> setResultEvent;
 
-        public SingleLiveEvent<String> getShowDialogEvent() {
+        public SingleLiveEvent<String> getShowLoadingDialogEvent() {
             return showDialogEvent = createLiveData(showDialogEvent);
         }
 
-        public SingleLiveEvent<Void> getDismissDialogEvent() {
+        public SingleLiveEvent<Void> getDismissLoadingDialogEvent() {
             return dismissDialogEvent = createLiveData(dismissDialogEvent);
         }
 
@@ -254,11 +188,7 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
             return startActivityEvent = createLiveData(startActivityEvent);
         }
 
-        public SingleLiveEvent<Map<String, Object>> getStartContainerActivityEvent() {
-            return startContainerActivityEvent = createLiveData(startContainerActivityEvent);
-        }
-
-        public SingleLiveEvent<Map<String, Object>> getstartActivityForResultEvent() {
+        public SingleLiveEvent<Map<String, Object>> getStartActivityForResultEvent() {
             return startActivityForResultEvent = createLiveData(startActivityForResultEvent);
         }
 
@@ -268,10 +198,6 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
 
         public SingleLiveEvent<Void> getOnBackPressedEvent() {
             return onBackPressedEvent = createLiveData(onBackPressedEvent);
-        }
-
-        public SingleLiveEvent<Pair<Integer, Intent>> getSetResultEvent() {
-            return setResultEvent = createLiveData(setResultEvent);
         }
 
         private <T> SingleLiveEvent<T> createLiveData(SingleLiveEvent<T> liveData) {
@@ -293,6 +219,4 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
         public static String BUNDLE = "BUNDLE";
         public static String REQUEST_CODE = "REQUEST_CODE";
     }
-
-
 }

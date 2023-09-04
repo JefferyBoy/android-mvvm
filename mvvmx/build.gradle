@@ -1,18 +1,13 @@
 apply plugin: 'com.android.library'
 
-version '2.0.3'
-group 'com.gainscha'
-
-apply from: '../nexus.gradle'
-
+version '2.1.0'
+group 'com.github.jefboy'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 28
-        versionCode 1
-        versionName '1.0'
+        minSdkVersion 21
+        targetSdkVersion 31
     }
     dataBinding {
         enabled true
@@ -31,35 +26,14 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
+    //support
     api androidx.appcompat
-    api androidx.recyclerview
-    //lifecycle
-    api androidx.lifecycle_viewmodel
     //rxjava
     api depends.rxjava
     api depends.rxandroid
-    api depends.rxlifecycle
-    api depends.rxlifecycle_android
-    api depends.rxlifecycle_android_lifecycle
-    //rx权限请求
-    api depends.rxpermissions
-    //网络请求
-    api depends.okhttp
-    api depends.okhttp_logging_interceptor
-    api depends.retrofit2
-    api depends.retrofit2_converter_gson
-    api depends.retrofit2_adapter_rxjava
-    //json解析
-    api depends.gson
     //glide图片加载库
     api depends.glide
-    //dataBinding的通用adapter
-    api depends.bindingcollectionadapter
-    api depends.bindingcollectionadapter_recyclerview
-    //对话框
-    api depends.dialogx
-
-    //注解处理器
-    annotationProcessor androidx.lifecycle_compiler
     annotationProcessor depends.glide_compiler
+    api depends.bindingcollectionadapter
+    api depends['bindingcollectionadapter-recyclerview']
 }

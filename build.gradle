@@ -1,34 +1,13 @@
+plugins {
+    id("com.android.application") version "7.2.2" apply false
+    id("com.android.library") version "7.2.2" apply false
+    id("org.jetbrains.kotlin.android") version "1.8.20" apply false
+}
 apply from: "config.gradle"
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0'
-    }
-}
-
-allprojects {
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
-        maven {
-            url "http://118.31.6.84:8081/repository/maven-public/"
-            allowInsecureProtocol true
-        }
-        maven { url 'https://jitpack.io' }
-    }
-}
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
 tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
-
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 1, 'minutes'
-}
 

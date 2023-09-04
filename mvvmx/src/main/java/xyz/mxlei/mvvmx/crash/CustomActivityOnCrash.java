@@ -73,7 +73,7 @@ public final class CustomActivityOnCrash {
     @SuppressLint("StaticFieldLeak") //This is an application-wide component
     private static Application application;
     private static CaocConfig config = new CaocConfig();
-    private static Deque<String> activityLog = new ArrayDeque<>(MAX_ACTIVITIES_IN_LOG);
+    private static final Deque<String> activityLog = new ArrayDeque<>(MAX_ACTIVITIES_IN_LOG);
     private static WeakReference<Activity> lastActivityCreated = new WeakReference<>(null);
     private static boolean isInBackground = true;
 
@@ -115,7 +115,7 @@ public final class CustomActivityOnCrash {
                                         return;
                                     }
                                 } else {
-                                    setLastCrashTimestamp(application, new Date().getTime());
+                                    setLastCrashTimestamp(application, System.currentTimeMillis());
 
                                     Class<? extends Activity> errorActivityClass = config.getErrorActivityClass();
 
@@ -191,7 +191,7 @@ public final class CustomActivityOnCrash {
                     });
                     application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
                         int currentlyStartedActivities = 0;
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                        final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
                         @Override
                         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {

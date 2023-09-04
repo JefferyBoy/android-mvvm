@@ -6,10 +6,6 @@ package xyz.mxlei.mvvmx.base;
 
 public interface IBaseView {
     /**
-     * 初始化界面传递参数
-     */
-    void initParam();
-    /**
      * 初始化数据
      */
     void initData();
