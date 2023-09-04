@@ -30,7 +30,7 @@ import androidx.annotation.Nullable;
 
 import xyz.mxlei.mvvmx.base.AppManager;
 import xyz.mxlei.mvvmx.crash.CustomActivityOnCrash;
-import xyz.mxlei.mvvmx.utils.Utils;
+import xyz.mxlei.mvvmx.utils.Mvvm;
 
 
 /**
@@ -41,7 +41,7 @@ public class StartUpProvider extends ContentProvider {
     public boolean onCreate() {
         Context context = getContext().getApplicationContext();
         // 初始化工具类
-        Utils.init(context);
+        Mvvm.init(context);
         // 崩溃捕获
         CustomActivityOnCrash.install(context);
         //注册监听每个activity的生命周期,便于堆栈式管理

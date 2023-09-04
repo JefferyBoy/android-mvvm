@@ -1,6 +1,5 @@
 package xyz.mxlei.app.data;
 
-import xyz.mxlei.app.app.AppApplication;
 import xyz.mxlei.app.data.source.db.DbDataSource;
 import xyz.mxlei.app.data.source.file.FileDataSource;
 import xyz.mxlei.app.data.source.http.HttpDataSource;
@@ -18,7 +17,7 @@ public class DataRepository {
     }
 
     public static HttpDataSource http() {
-        return HttpDataSource.getInstance(AppApplication.getInstance());
+        return HttpDataSource.getInstance();
     }
 
     public static SpDataSource sp() {

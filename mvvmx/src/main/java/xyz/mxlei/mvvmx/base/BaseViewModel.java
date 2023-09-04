@@ -15,7 +15,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import xyz.mxlei.mvvmx.bus.event.SingleLiveEvent;
-import xyz.mxlei.mvvmx.utils.Utils;
+import xyz.mxlei.mvvmx.utils.Mvvm;
 
 /**
  * @author mxlei
@@ -28,7 +28,7 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel, C
     private CompositeDisposable mCompositeDisposable;
 
     public BaseViewModel() {
-        super((Application) Utils.getContext());
+        super((Application) Mvvm.getContext());
     }
 
     public BaseViewModel(Application app) {

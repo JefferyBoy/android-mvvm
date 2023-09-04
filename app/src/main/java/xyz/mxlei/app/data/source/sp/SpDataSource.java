@@ -1,10 +1,13 @@
 package xyz.mxlei.app.data.source.sp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import xyz.mxlei.app.data.model.User;
-import xyz.mxlei.mvvmx.utils.SPUtils;
+import xyz.mxlei.mvvmx.utils.Mvvm;
 
 /**
  * SharePreference数据源
@@ -14,11 +17,11 @@ import xyz.mxlei.mvvmx.utils.SPUtils;
  */
 public class SpDataSource {
     private volatile static SpDataSource INSTANCE = null;
-    private SPUtils sp;
-    private Gson gson;
+    private final SharedPreferences sp;
+    private final Gson gson;
 
     private SpDataSource() {
-        sp = SPUtils.getInstance();
+        sp = Mvvm.getContext().getSharedPreferences("SharedPreferencesDefault.db", Context.MODE_PRIVATE);
         gson = new Gson();
     }
 
@@ -34,7 +37,7 @@ public class SpDataSource {
     }
 
     public User getLoginUser() {
-        String str = sp.getString("LoginUser");
+        String str = sp.getString("LoginUser", null);
         User user = null;
         try {
             if (str != null && str.length() > 0) {
@@ -43,12 +46,14 @@ public class SpDataSource {
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         } finally {
-            if (user == null) user = new User();
+            if (user == null) {
+                user = new User();
+            }
         }
         return user;
     }
 
     public void setLoginUser(User user) {
-        sp.putRealTime("LoginUser", gson.toJson(user));
+        sp.edit().putString("LoginUser", gson.toJson(user)).apply();
     }
 }

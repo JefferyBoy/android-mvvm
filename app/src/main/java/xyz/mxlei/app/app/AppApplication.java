@@ -4,19 +4,15 @@ import android.app.Application;
 
 import com.squareup.leakcanary.LeakCanary;
 
-import xyz.mxlei.app.BuildConfig;
 import xyz.mxlei.app.R;
 import xyz.mxlei.app.ui.MainActivity;
 import xyz.mxlei.mvvmx.crash.CaocConfig;
-import xyz.mxlei.mvvmx.utils.KLog;
 
 public class AppApplication extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        //是否开启打印日志
-        KLog.init(BuildConfig.DEBUG);
         //初始化全局异常崩溃
         initCrash();
         //内存泄漏检测

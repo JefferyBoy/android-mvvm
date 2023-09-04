@@ -1,24 +1,26 @@
 package xyz.mxlei.mvvmx.base;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.kongzue.dialogx.dialogs.WaitDialog;
-
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Map;
+
+import xyz.mxlei.mvvmx.R;
 
 /**
  * @author mxlei
@@ -28,6 +30,7 @@ public abstract class BaseDialog<VB extends ViewDataBinding, VM extends BaseView
 
     protected VB binding;
     protected VM viewModel;
+    private Dialog dialog;
 
     public BaseDialog() {
 
@@ -36,7 +39,6 @@ public abstract class BaseDialog<VB extends ViewDataBinding, VM extends BaseView
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        initParam(getArguments());
         initViewDataBinding(inflater, container, savedInstanceState);
         registorUIChangeLiveDataCallBack();
         initData();
@@ -56,10 +58,6 @@ public abstract class BaseDialog<VB extends ViewDataBinding, VM extends BaseView
         }
     }
 
-    protected void initParam(Bundle arg) {
-
-    }
-
     protected void initData() {
 
     }
@@ -68,8 +66,6 @@ public abstract class BaseDialog<VB extends ViewDataBinding, VM extends BaseView
 
     }
 
-    protected abstract int initContentView();
-
     protected abstract int initVariableId();
 
     protected VM initViewModel() {
@@ -77,32 +73,35 @@ public abstract class BaseDialog<VB extends ViewDataBinding, VM extends BaseView
     }
 
     private void initViewDataBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.binding = DataBindingUtil.inflate(inflater, initContentView(), container, true);
+        ParameterizedType type = (ParameterizedType) getClass().getGenericSuperclass();
+        Class bindingClass = (Class) type.getActualTypeArguments()[0];
+        Class viewModelClass = (Class) type.getActualTypeArguments()[1];
+        try {
+            Method inflateMethod = bindingClass.getMethod("inflate", LayoutInflater.class);
+            this.binding = (VB) inflateMethod.invoke(null, inflater);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
         this.viewModel = this.initViewModel();
         if (this.viewModel == null) {
-            Type type = this.getClass().getGenericSuperclass();
-            Class modelClass;
-            if (type instanceof ParameterizedType) {
-                modelClass = (Class) ((ParameterizedType) type).getActualTypeArguments()[1];
-            } else {
-                modelClass = BaseViewModel.class;
+            if (viewModelClass == null) {
+                viewModelClass = BaseViewModel.class;
             }
-            viewModel = (VM) new ViewModelProvider(this).get(modelClass);
+            viewModel = (VM) new ViewModelProvider(this).get(viewModelClass);
         }
         this.binding.setVariable(initVariableId(), this.viewModel);
         this.binding.setLifecycleOwner(this);
         this.getLifecycle().addObserver(this.viewModel);
-        this.viewModel.injectLifecycleOwner(this);
     }
 
     private void registorUIChangeLiveDataCallBack() {
-        this.viewModel.getUC().getShowDialogEvent().observe(this, new Observer<String>() {
+        this.viewModel.getUC().getShowLoadingDialogEvent().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String title) {
                 BaseDialog.this.showDialog(title);
             }
         });
-        this.viewModel.getUC().getDismissDialogEvent().observe(this, new Observer<Void>() {
+        this.viewModel.getUC().getDismissLoadingDialogEvent().observe(this, new Observer<Void>() {
             @Override
             public void onChanged(@Nullable Void v) {
                 BaseDialog.this.dismissDialog();
@@ -116,7 +115,7 @@ public abstract class BaseDialog<VB extends ViewDataBinding, VM extends BaseView
                 BaseDialog.this.startActivity(clz, bundle);
             }
         });
-        this.viewModel.getUc().getstartActivityForResultEvent().observe(this, new Observer<Map<String, Object>>() {
+        this.viewModel.getUc().getStartActivityForResultEvent().observe(this, new Observer<Map<String, Object>>() {
             @Override
             public void onChanged(@Nullable Map<String, Object> params) {
                 Class<?> clz = (Class) params.get(BaseViewModel.ParameterField.CLASS);
@@ -128,14 +127,6 @@ public abstract class BaseDialog<VB extends ViewDataBinding, VM extends BaseView
                 }
 
                 BaseDialog.this.startActivityForResult(intent, requestCode);
-            }
-        });
-        this.viewModel.getUC().getStartContainerActivityEvent().observe(this, new Observer<Map<String, Object>>() {
-            @Override
-            public void onChanged(@Nullable Map<String, Object> params) {
-                String canonicalName = (String) params.get(BaseViewModel.ParameterField.CANONICAL_NAME);
-                Bundle bundle = (Bundle) params.get(BaseViewModel.ParameterField.BUNDLE);
-                BaseDialog.this.startContainerActivity(canonicalName, bundle);
             }
         });
         this.viewModel.getUC().getFinishEvent().observe(this, new Observer<Void>() {
@@ -152,13 +143,22 @@ public abstract class BaseDialog<VB extends ViewDataBinding, VM extends BaseView
         });
     }
 
-
     protected void showDialog(String title) {
-        WaitDialog.show(title);
+        if (dialog == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                .setView(R.layout.mvvmx_dialog_loading);
+            if (TextUtils.isEmpty(title)) {
+                builder.setTitle(title);
+            }
+            dialog = builder.create();
+        }
+        dialog.show();
     }
 
     protected void dismissDialog() {
-        WaitDialog.dismiss();
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
     }
 
     protected void startActivity(Class<?> clz) {
@@ -169,19 +169,6 @@ public abstract class BaseDialog<VB extends ViewDataBinding, VM extends BaseView
         Intent intent = new Intent(requireContext(), clz);
         if (bundle != null) {
             intent.putExtras(bundle);
-        }
-        this.startActivity(intent);
-    }
-
-    protected void startContainerActivity(String canonicalName) {
-        this.startContainerActivity(canonicalName, null);
-    }
-
-    protected void startContainerActivity(String canonicalName, Bundle bundle) {
-        Intent intent = new Intent(requireContext(), ContainerActivity.class);
-        intent.putExtra("fragment", canonicalName);
-        if (bundle != null) {
-            intent.putExtra("bundle", bundle);
         }
         this.startActivity(intent);
     }

@@ -2,7 +2,9 @@ package xyz.mxlei.app.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
@@ -13,8 +15,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import xyz.mxlei.app.data.DataRepository;
 import xyz.mxlei.app.data.model.User;
 import xyz.mxlei.mvvmx.base.BaseViewModel;
-import xyz.mxlei.mvvmx.utils.KLog;
-import xyz.mxlei.mvvmx.utils.ToastUtils;
 
 /**
  * @author mxlei
@@ -36,7 +36,7 @@ public class MainViewModel extends BaseViewModel {
 
     @SuppressLint("CheckResult")
     public void login() {
-        KLog.d("login " + user.getValue().getName() + "\t" + user.getValue().getPassword());
+        Log.d("demo", "login " + user.getValue().getName() + "\t" + user.getValue().getPassword());
         DataRepository.sp().setLoginUser(user.getValue());
         DataRepository.http()
             .login(user.getValue().getName(), user.getValue().getPassword())
@@ -45,16 +45,16 @@ public class MainViewModel extends BaseViewModel {
             .subscribe(new Consumer<Boolean>() {
                 @Override
                 public void accept(Boolean aBoolean) throws Exception {
-                    ToastUtils.showShort(aBoolean ? "登录成功" : "登录失败");
+                    Toast.makeText(getApplication(), aBoolean ? "登录成功" : "登录失败", Toast.LENGTH_SHORT).show();
                 }
             });
     }
 
     public void clickLogin(View v) {
-        KLog.d("clickLogin");
+        Log.d("demo", "clickLogin");
     }
 
     public void clickImage(View v) {
-        KLog.d("clickImage");
+        Log.d("demo", "clickImage");
     }
 }
